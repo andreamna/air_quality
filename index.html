@@ -75,7 +75,7 @@
   </section>
 
   <!-- Charts Section -->
-  <section id="charts" class="content-section">
+  <section id="charts" class="content-section" style="display: none;">
     <h2>Charts</h2>
     
     <!-- Chart Type Buttons -->
@@ -104,12 +104,35 @@
         <option value="1y">1 Year</option>
       </select>
     </div>
+    <!-- Dropdown for Bar Chart -->
+<div id="barChartDropdown" style="display: none; margin-top: 1rem;">
+  <label for="barChartFilter">Filter Bar Chart:</label>
+  <select id="barChartFilter">
+    <option value="all">All Pollutants</option>
+    <option value="particulate">Particulate Matter (PM2.5, PM10)</option>
+    <option value="gaseous">Gaseous Pollutants (NOx, NH3, CO2, SO2)</option>
+  </select>
+</div>
+
+<!-- Dropdown for Doughnut Chart -->
+<div id="doughnutChartDropdown" style="display: none; margin-top: 1rem;">
+  <label for="doughnutChartFilter">Filter Doughnut Chart:</label>
+  <select id="doughnutChartFilter">
+    <option value="all">All Pollutants</option>
+    <option value="particulate">Particulate Matter (PM2.5, PM10)</option>
+    <option value="gaseous">Gaseous Pollutants (NOx, NH3, CO2, SO2)</option>
+  </select>
+</div>
+
+
 
 <!-- Charts -->
 <canvas id="lineChart" style="display: none;"></canvas>
 <canvas id="barChart" style="display: none;"></canvas>
 <canvas id="doughnutChart" style="display: none;"></canvas>
-
+<br>
+<br>
+  </section>
   
   <!-- About Section -->
   <section id="about" class="content-section" style="display: none;">
@@ -119,20 +142,17 @@
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <h3>Options</h3>
-    <button onclick="showComparisonChart()">Create Comparison Chart</button>
-    <button onclick="toggleUnits()">Toggle Units (°C/°F)</button>
-    <button onclick="HistoricalData()">Explore Historical Data</button>
-    <button onclick="WorldwideData()">Explore Worldwide Data</button>
-  </div>
+      <h3>Options</h3>
+        <button>Create Comparison Chart</button>
+        <button>Toggle Units (°C/°F)</button>
+        <button>Explore Historical Data</button>
+        <button>Explore Worldwide Data</button>
+    </div>
 
   <!-- Footer -->
-   <br>
-   <br>
-   <br>
-  <footer>
+   <footer>
     <p>&copy; 2024 Air Quality Dashboard. All rights reserved.</p>
-  </footer>
+   </footer>
 
   <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>

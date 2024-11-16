@@ -70,8 +70,7 @@ header {
   text-align: center;
   padding-top: 50px;
   margin-top: 0;
-  
-
+  margin-bottom: 0;
 }
 
 .intro-content {
@@ -123,17 +122,6 @@ section {
   border-radius: 10px;
 }
 
-footer {
-  margin-top: 20px;
-  background-color: #4a5c7a;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  z-index: 1000;
-}
 
 /* Dashboard Styling */
 .dashboard-container {
@@ -225,54 +213,6 @@ button:hover {
 }
 
 /* Sidebar styling */
-.sidebar {
-position: fixed;
-top: 0;
-left: -180px; /* Initially hidden */
-width: 200px;
-height: 100%;
-background-color: #2a3b5a;
-color: #fff;
-padding: 20px;
-box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
-font-family: 'Poppins', sans-serif;
-transition: left 0.3s ease; /* Smooth transition */
-z-index: 1100;
-}
-
-/* Sidebar content styling */
-.sidebar h3 {
-margin-bottom: 20px;
-color: #f8de7e;
-}
-
-.sidebar button {
-display: block;
-width: 100%;
-margin: 10px 0;
-padding: 10px;
-background-color: #4a5c7a;
-color: #fff;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-}
-
-.sidebar button:hover {
-background-color: #3b4a6a;
-}
-
-/* Hover effect to reveal the sidebar */
-.sidebar:hover {
-left: 0;
-}
-.detailed-data-container {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #fcb54a;
-  border-radius: 10px;
-  text-align: center;
-}
 
 .detailed-cards {
   display: flex;
@@ -373,3 +313,65 @@ left: 0;
   max-width: 200px;
 }
 
+#about {
+  display: none; /* Hidden by default */
+  background-color: #FFF9C4; /* Light yellow, consistent with other sections */
+  color: #333; /* Ensure text is readable */
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -180px; /* Initially hidden */
+  width: 200px;
+  height: 100%;
+  background-color: #2a3b5a;
+  color: #fff;
+  padding: 20px;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+  transition: left 0.3s ease; /* Smooth transition */
+  z-index: 1100;
+  }
+  
+  /* Sidebar content styling */
+  .sidebar h3 {
+  margin-bottom: 20px;
+  color: #f8de7e;
+  }
+  
+  .sidebar button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #4a5c7a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  }
+  
+  .sidebar button:hover {
+  background-color: #3b4a6a;
+  }
+  
+  /* Hover effect to reveal the sidebar */
+  .sidebar:hover {
+  left: 0;
+  }
+
+  footer {
+    margin-top: 0;
+    background-color: #4a5c7a;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 1000;
+  }

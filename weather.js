@@ -19,16 +19,19 @@ document.getElementById("displayDataButton").addEventListener("click", displayDa
 
 // Function to show a specific section and hide others
 function showSection(sectionId) {
-  // Hide all content sections
-  document.querySelectorAll('.content-section').forEach(section => {
-    section.style.display = 'none';
+  // Hide all sections
+  document.querySelectorAll('.content-section, #intro-section').forEach((section) => {
+    section.style.display = 'none'; // Hide all other sections
   });
 
   // Show the selected section
   const targetSection = document.getElementById(sectionId);
-  targetSection.style.display = 'block';
-  
+  if (targetSection) {
+    targetSection.style.display = 'block';
+    console.log(`Showing section: ${sectionId}`); // Debugging
+  }
 }
+
 
 // Function to fetch weather data
 function fetchWeather() {
@@ -203,19 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('home').style.display = 'none';
   document.getElementById('charts').style.display = 'none';
   document.getElementById('about').style.display = 'none';
+  document.querySelector('.sidebar').style.display = 'block';
+  document.querySelector('footer').style.display = 'block';
+
 });
-
-// Function to show a specific section and hide others
-function showSection(sectionId) {
-  // Hide all content sections, including the intro section
-  document.querySelectorAll('.content-section, #intro-section').forEach(section => {
-    section.style.display = 'none';
-  });
-
-  // Show the selected section
-  const targetSection = document.getElementById(sectionId);
-  targetSection.style.display = 'block';
-}
 
 function updateBarChartWithRealData() {
   fetchAirQualityData().then(data => {
@@ -250,7 +244,9 @@ function showBarChart() {
   document.getElementById("barChart").style.display = "block";
   document.getElementById("doughnutChart").style.display = "none";
   document.getElementById("dateRangeContainer").style.display = "none"; // Hide date range dropdown
-  updateBarChartWithRealData()
+  document.getElementById("barChartDropdown").style.display = "block"; // Show bar chart dropdown
+  document.getElementById("doughnutChartDropdown").style.display = "none"; // Hide doughnut chart dropdown
+  updateBarChartWithRealData();
 }
 
 function showDoughnutChart() {
@@ -258,14 +254,19 @@ function showDoughnutChart() {
   document.getElementById("barChart").style.display = "none";
   document.getElementById("doughnutChart").style.display = "block";
   document.getElementById("dateRangeContainer").style.display = "none"; // Hide date range dropdown
+  document.getElementById("barChartDropdown").style.display = "none"; // Hide bar chart dropdown
+  document.getElementById("doughnutChartDropdown").style.display = "block"; // Show doughnut chart dropdown
   updateDoughnutChartWithRealData();
 }
+
 
 function showLineChart() {
   document.getElementById("lineChart").style.display = "block";
   document.getElementById("barChart").style.display = "none";
   document.getElementById("doughnutChart").style.display = "none";
   document.getElementById("dateRangeContainer").style.display = "block";
+  document.getElementById("barChartDropdown").style.display = "none"; // Hide bar chart dropdown
+  document.getElementById("doughnutChartDropdown").style.display = "none"; // Show doughnut chart dropdown
 }
      
       // Generate mock data for testing (Replace with actual API data fetching)
@@ -585,8 +586,8 @@ function generateMockData(points, period) {
   });
       
       // Function to update bar chart with fetched data
-      function updateBarChart(pollutantData) {
-        barChart.data.datasets[0].data = pollutantData;
+      function updateBarChart(filteredData) {
+        barChart.data.datasets[0].data = filteredData;
         barChart.update();
       }
       const doughnutChartCtx = document.getElementById('doughnutChart').getContext('2d');
@@ -636,9 +637,40 @@ function generateMockData(points, period) {
           }
       }
   });
+
+  document.getElementById("barChartFilter").addEventListener("change", (event) => {
+    const filter = event.target.value;
+    fetchAirQualityData().then((data) => {
+      let filteredData;
+      if (filter === "all") {
+        filteredData = [data.pm2_5, data.pm10, data.no2, data.nh3, data.co, data.so2];
+      } else if (filter === "particulate") {
+        filteredData = [data.pm2_5, data.pm10];
+      } else if (filter === "gaseous") {
+        filteredData = [data.no2, data.nh3, data.co, data.so2];
+      }
+      updateBarChart(filteredData);
+    });
+  });
+  
+  document.getElementById("doughnutChartFilter").addEventListener("change", (event) => {
+    const filter = event.target.value;
+    fetchAirQualityData().then((data) => {
+      let filteredData;
+      if (filter === "all") {
+        filteredData = [data.pm2_5, data.pm10, data.no2, data.nh3, data.co, data.so2];
+      } else if (filter === "particulate") {
+        filteredData = [data.pm2_5, data.pm10];
+      } else if (filter === "gaseous") {
+        filteredData = [data.no2, data.nh3, data.co, data.so2];
+      }
+      updateDoughnutChart(filteredData);
+    });
+  });
+  
       
       // Function to update doughnut chart with fetched distribution data
-      function updateDoughnutChart(distributionData) {
-        doughnutChart.data.datasets[0].data = distributionData;
+      function updateDoughnutChart(filteredData) {
+        doughnutChart.data.datasets[0].data = filteredData;
         doughnutChart.update();
       }
