@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Air Quality Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <h1>Air Quality Monitoring Dashboard</h1>
+    <p>Stay updated with real-time air quality data</p>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="#" onclick="showSection('intro-section')">Home</a></li>
+      <li><a href="#" onclick="showSection('charts')">Charts</a></li>
+      <li><a href="#" onclick="showSection('about')">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Full-screen Intro Section -->
+  <section id="intro-section" class="intro-section">
+    <div class="intro-content">
+      <h4>Your source for real-time air quality insights.</h4>
+      <button id="displayDataButton" onclick="displayData()">Display Today's Data</button>
+    </div>
+  </section>
+
+  <!-- Home Section (Initially Hidden) -->
+  <section id="home" class="content-section" style="display: none;">
+    <h2>Today's current data</h2>
+    <div class="dashboard-container">
+      <div class="dashboard-card" id="temperature-card">
+        <h3>Temperature</h3>
+        <div class="icon" id="weather-icon">☀️</div>
+        <p><span id="temperature">--</span>°C</p>
+      </div>
+      <div class="dashboard-card" id="humidity-card">
+        <h3>Humidity</h3>
+        <div class="humidity-icon">💧</div>
+        <p><span id="humidity">--</span>%</p>
+      </div>
+      <div class="dashboard-card" id="air-quality-card">
+        <h3>Air Quality</h3>
+        <div id="air-quality-status" class="status">Loading...</div>
+        <br>
+        <button onclick="loadDetailedData()">Load Data</button>
+      </div>
+    </div>
+    <!-- Detailed Air Quality Data Section (Initially Hidden) -->
+    <div id="detailed-data" class="detailed-data-container" style="display: none;">
+      <h3>Detailed Air Quality Data</h3>
+      <div class="detailed-cards">
+        <div class="detailed-card"><strong>PM2.5:</strong> <span id="pm25">--</span> µg/m³</div>
+        <div class="detailed-card"><strong>PM10:</strong> <span id="pm10">--</span> µg/m³</div>
+        <div class="detailed-card"><strong>CO:</strong> <span id="co">--</span> µg/m³</div>
+        <div class="detailed-card"><strong>NO2:</strong> <span id="no2">--</span> µg/m³</div>
+        <div class="detailed-card"><strong>SO2:</strong> <span id="so2">--</span> µg/m³</div>
+        <div class="detailed-card"><strong>NH3:</strong> <span id="nh3">--</span> µg/m³</div>
+      </div>
+
+      <p id="air-quality-explanation" class="explanation-text">
+        <strong>Air quality criteria:</strong><br><br>
+        <span class="criteria-line"><span class="good-label">Good:</span> Average is below 50 µg/m³</span><br>
+        <span class="criteria-line"><span class="average-label">Average:</span> Between 50 and 100 µg/m³</span><br>
+        <span class="criteria-line"><span class="bad-label">Bad:</span> Above 100 µg/m³</span><br><br>
+        <strong>Currently:</strong> The average air quality is <span class="highlighted-text"><strong><span id="average-aq">--</span> µg/m³</strong></span>, which is considered <span class="highlighted-text"><strong><span id="aq-status">--</span></strong></span>
+      </p>      
+</div>
+  </section>
+
+  <!-- Charts Section -->
+  <section id="charts" class="content-section">
+    <h2>Charts</h2>
+    
+    <!-- Chart Type Buttons -->
+    <div id="chartTypeButtons" style="display: flex; gap: 1rem; align-items: flex-start;">
+      <div>
+        <button onclick="showLineChart()">Line Chart</button>
+        <p>Visualize trends for temperature and humidity over time.</p>
+      </div>
+      <div>
+        <button onclick="showBarChart()">Bar Chart</button>
+        <p>Show levels of PM2.5, PM10, NOx, NH3, CO2, SO2, and VOC.</p>
+      </div>
+      <div>
+        <button onclick="showDoughnutChart()">Doughnut Chart</button>
+        <p>Represent the distribution of various pollutants.</p>
+      </div>
+    </div>
+  
+    <!-- Line Chart Dropdown -->
+    <div id="dateRangeContainer" style="display: none; margin-top: 1rem;">
+      <label for="dateRange">Select Date Range:</label>
+      <select id="dateRange" onchange="fetchDataForDateRange()">
+        <option value="1d">1 Day</option>
+        <option value="1w">1 Week</option>
+        <option value="1m">1 Month</option>
+        <option value="1y">1 Year</option>
+      </select>
+    </div>
+
+<!-- Charts -->
+<canvas id="lineChart" style="display: none;"></canvas>
+<canvas id="barChart" style="display: none;"></canvas>
+<canvas id="doughnutChart" style="display: none;"></canvas>
+
+  
+  <!-- About Section -->
+  <section id="about" class="content-section" style="display: none;">
+    <h2>About</h2>
+    <p>Learn more about our air quality monitoring project and the sources of data we use.</p>
+  </section>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>Options</h3>
+    <button onclick="showComparisonChart()">Create Comparison Chart</button>
+    <button onclick="toggleUnits()">Toggle Units (°C/°F)</button>
+    <button onclick="HistoricalData()">Explore Historical Data</button>
+    <button onclick="WorldwideData()">Explore Worldwide Data</button>
+  </div>
+
+  <!-- Footer -->
+   <br>
+   <br>
+   <br>
+  <footer>
+    <p>&copy; 2024 Air Quality Dashboard. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+  <script src="weather.js"></script>
+</body>
+</html>

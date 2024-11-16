@@ -1,0 +1,375 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #FFF9C4; 
+  color: #333;
+}
+
+/* Header Font Styling */
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  padding-left: 20px;
+}
+
+/* Header styling */
+header {
+  background-color: #2a3b5a; 
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+.navbar {
+  background-color: #d1c4e9; 
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar li {
+  margin: 0 15px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: inline-block;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.navbar a:hover {
+  background-color: #4a5c7a; 
+}
+
+
+/* Intro Section Styling */
+.intro-section {
+  border-radius: 0%;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url('skypic.jpeg') no-repeat center center/cover; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding-top: 50px;
+  margin-top: 0;
+  
+
+}
+
+.intro-content {
+background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+padding: 25px;
+border-radius: 20px;
+text-align: center;
+margin-top: 20px;
+margin-left: 20px;
+}
+
+
+
+.intro-content button {
+padding: 10px 20px;
+font-size: 1em;
+color: #333;
+background-color: #f8de7e;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.intro-content button:hover {
+background-color: #e0c857;
+}
+
+#home {
+display: none;
+position: relative;
+z-index: 1;
+background-color: #fcb54a; 
+padding: 20px;
+border-radius: 8px;
+margin-top: 20px;
+}
+
+
+main {
+  padding-left: 20px;
+  width: calc(100%- 20px);
+  padding: 20px;
+  text-align: center;
+}
+
+section {
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+footer {
+  margin-top: 20px;
+  background-color: #4a5c7a;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 1000;
+}
+
+/* Dashboard Styling */
+.dashboard-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  width: 80%; /* Width of the dashboard container */
+  margin: 0 auto; /* Center dashboard within main */
+}
+
+.dashboard-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  width: 30%;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card p {
+  font-size: 1.8em; 
+  font-weight: bold; 
+  color: #333; 
+}
+
+.dashboard-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  color: #2a3b5a;
+}
+
+.icon {
+  font-size: 3em;
+  margin-bottom: 10px;
+  color: #fcb54a;
+}
+
+.status {
+  font-size: 1.5em; 
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.humidity-icon {
+  font-size: 3em; 
+  color: #00aaff; 
+  margin-bottom: 5px; 
+}
+
+#humidity-card p {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  margin: 0; 
+}
+
+
+.status.good {
+  color: green;
+}
+
+.status.average {
+  color: orange;
+}
+
+.status.bad {
+  color: red;
+}
+
+
+button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Sidebar styling */
+.sidebar {
+position: fixed;
+top: 0;
+left: -180px; /* Initially hidden */
+width: 200px;
+height: 100%;
+background-color: #2a3b5a;
+color: #fff;
+padding: 20px;
+box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+font-family: 'Poppins', sans-serif;
+transition: left 0.3s ease; /* Smooth transition */
+z-index: 1100;
+}
+
+/* Sidebar content styling */
+.sidebar h3 {
+margin-bottom: 20px;
+color: #f8de7e;
+}
+
+.sidebar button {
+display: block;
+width: 100%;
+margin: 10px 0;
+padding: 10px;
+background-color: #4a5c7a;
+color: #fff;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.sidebar button:hover {
+background-color: #3b4a6a;
+}
+
+/* Hover effect to reveal the sidebar */
+.sidebar:hover {
+left: 0;
+}
+.detailed-data-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #fcb54a;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.detailed-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.detailed-card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.2em;
+  width: 120px;
+}
+
+.explanation-text {
+  text-align: center;
+  font-size: 1.2em; /* Increase overall font size */
+  margin: 20px 0;
+}
+
+.criteria-line {
+  display: block;
+  margin-bottom: 10px; /* Additional spacing for clarity */
+}
+
+.good-label, .average-label, .bad-label {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #2a3b5a; /* Dark blue color for labels */
+}
+
+.highlighted-text {
+  color: #2a3b5a; /* Dark blue color for highlighted average and status */
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#charts canvas {
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+#lineChart, #barChart, #doughnutChart {
+  width: 90%; /* Chart width as a percentage of parent */
+  max-width: 600px; /* Set a maximum width for the chart */
+  height: auto; /* Maintain aspect ratio */
+  max-height: 400px; /* Set a maximum height */
+  margin: 20px auto; /* Center the chart */
+}
+
+#dateRange {
+  padding: 5px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+#dateRangeContainer {
+  display: none;
+}
+
+#charts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#chartTypeButtons {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  justify-content: center; /* Align items horizontally */
+}
+
+#chartTypeButtons div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#chartTypeButtons button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+#chartTypeButtons p {
+  font-size: 0.9rem;
+  color: #555;
+  max-width: 200px;
+}
+
