@@ -674,3 +674,185 @@ function generateMockData(points, period) {
         doughnutChart.data.datasets[0].data = filteredData;
         doughnutChart.update();
       }
+
+      function toggleComparisonMenu() {
+        const submenu = document.getElementById('comparison-submenu');
+        if (submenu.style.display === 'none') {
+          submenu.style.display = 'block';
+        } else {
+          submenu.style.display = 'none';
+        }
+      }
+
+      let cities = []; // Will hold the cities from the JSON file
+      let selectedCities = {}; // Object to store selected cities by inputId
+      
+      // Fetch cities data and store it
+      async function loadCities() {
+        try {
+          const response = await fetch('simplified_cities.json'); // Update the path as necessary
+          cities = await response.json();
+        } catch (error) {
+          console.error('Error loading cities:', error);
+        }
+      }
+      
+      // Call this function on page load to populate the cities array
+      loadCities();
+      
+      function showSuggestions(inputId) {
+        const inputElement = document.getElementById(inputId);
+        const query = inputElement.value.toLowerCase();
+        const suggestionBox = document.getElementById(`suggestions-${inputId}`);
+        suggestionBox.innerHTML = ''; // Clear suggestions
+    
+        if (!query) {
+            suggestionBox.style.display = 'none';
+            selectedCities[inputId] = null; // Reset selection
+            return;
+        }
+    
+        const filteredCities = cities.filter(city =>
+            city.name.toLowerCase().includes(query) || city.country.toLowerCase().includes(query)
+        );
+    
+        filteredCities.slice(0, 5).forEach(city => {
+            const option = document.createElement('div');
+            option.textContent = `${city.name}, ${city.country}`;
+            option.onclick = () => {
+                inputElement.value = `${city.name}, ${city.country}`;
+                selectedCities[inputId] = {
+                    id: city.id,
+                    lat: city.lat,
+                    lon: city.lon
+                }; // Store lat and lon
+                suggestionBox.style.display = 'none';
+            };
+            suggestionBox.appendChild(option);
+        });
+        suggestionBox.style.display = 'block';
+    }
+    
+      
+      function validateCityFormat(cityInput) {
+        if (typeof cityInput !== 'string') return false;
+        const [city, country] = cityInput.split(',').map(part => part.trim());
+        return city && country && /^[A-Za-z\s]+$/.test(city) && /^[A-Z]{2}$/.test(country);
+      }
+      
+      document.getElementById('compareForm').addEventListener('submit', event => {
+        event.preventDefault();
+        const city1 = document.getElementById('city1').value.trim();
+        const city2 = document.getElementById('city2').value.trim();
+      
+        if (!validateCityFormat(city1)) {
+          alert('City 1 must be in the format: City, Country Code (e.g., New York, US)');
+          return;
+        }
+        if (!validateCityFormat(city2)) {
+          alert('City 2 must be in the format: City, Country Code (e.g., Seoul, KR)');
+          return;
+        }
+      
+        if (!selectedCities['city1'] || !selectedCities['city2']) {
+          alert('Please select valid cities from the suggestions.');
+          return;
+        }
+      
+        const chartType = document.getElementById('chartType').value;
+        loadCityComparison('city1', 'city2', chartType);
+      });
+      
+      // Load city comparison data
+      function loadCityComparison(city1InputId, city2InputId, chartType) {
+        const city1 = selectedCities[city1InputId];
+        const city2 = selectedCities[city2InputId];
+    
+        if (!city1 || !city2 || !city1.lat || !city1.lon || !city2.lat || !city2.lon) {
+            console.error('City coordinates are missing:', { city1, city2 });
+            alert('Please select valid cities.');
+            return;
+        }
+    
+        const apiKey = '642f7b103b1a8fe078e4dd6df0ef8721';
+        const city1ApiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${city1.lat}&lon=${city1.lon}&appid=${apiKey}`;
+        const city2ApiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${city2.lat}&lon=${city2.lon}&appid=${apiKey}`;
+    
+        console.log('City 1 API URL:', city1ApiUrl);
+        console.log('City 2 API URL:', city2ApiUrl);
+    
+        Promise.all([fetch(city1ApiUrl), fetch(city2ApiUrl)])
+            .then(async ([city1Response, city2Response]) => {
+                if (!city1Response.ok || !city2Response.ok) {
+                    throw new Error('Error fetching data for one or both cities.');
+                }
+                const city1Data = await city1Response.json();
+                const city2Data = await city2Response.json();
+    
+                console.log('City 1 Data:', city1Data);
+                console.log('City 2 Data:', city2Data);
+    
+                // Render charts (update as necessary)
+                renderChart('city1Chart', city1Data.list[0].components, chartType, city1InputId);
+                renderChart('city2Chart', city2Data.list[0].components, chartType, city2InputId);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                alert(error.message);
+            });
+    }
+    
+      
+      // Render the selected chart
+      function renderChart(chartId, airData, chartType, city) {
+        const ctx = document.getElementById(chartId).getContext('2d');
+        const labels = ['PM2.5', 'PM10', 'NO2', 'SO2', 'CO', 'NH3'];
+        const data = Object.values(airData);
+      
+        const config = {
+          type: chartType,
+          data: {
+              labels: labels,
+              datasets: [
+                  {
+                      label: `Air Quality in ${city}`,
+                      data: data,
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.5)',
+                          'rgba(54, 162, 235, 0.5)',
+                          'rgba(75, 192, 192, 0.5)',
+                          'rgba(255, 206, 86, 0.5)',
+                          'rgba(153, 102, 255, 0.5)',
+                          'rgba(255, 159, 64, 0.5)',
+                      ],
+                      borderColor: [
+                          'rgba(255, 99, 132, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)',
+                      ],
+                      borderWidth: 1,
+                  },
+              ],
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              aspectRatio: 1, // Adjust aspect ratio (e.g., 1 for square, 2 for rectangle)
+              plugins: {
+                  legend: {
+                      position: 'top',
+                  },
+              },
+          },
+      };
+      
+      
+        if (Chart.getChart(chartId)) {
+          Chart.getChart(chartId).destroy();
+        }
+        new Chart(ctx, config);
+      }
+      

@@ -7,12 +7,13 @@
 /* Body styling */
 body {
   font-family: 'Lato', sans-serif;
-  background-color: #FFF9C4; 
+  background-color: #f8f5e7; 
   color: #333;
 }
 
 /* Header Font Styling */
 h1, h2, h3 {
+  text-align: center;
   font-family: 'Poppins', sans-serif;
   padding-left: 20px;
 }
@@ -71,6 +72,7 @@ header {
   padding-top: 50px;
   margin-top: 0;
   margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .intro-content {
@@ -364,14 +366,237 @@ button:hover {
   left: 0;
   }
 
-  footer {
-    margin-top: 0;
-    background-color: #4a5c7a;
-    color: #fff;
+  /* Style for menu item */
+.menu-item {
+  position: relative;
+}
+
+/* Submenu styling */
+/* Submenu styling */
+.submenu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 50px; /* Adjust to position the submenu below the parent button */
+  left: 0;
+  background-color: #4a5c7a;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  padding: 10px;
+}
+
+.submenu button {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  background-color: #3b4a6a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.submenu button:hover {
+  background-color: #2a3b5a;
+}
+
+/* Show submenu on hover */
+.menu-item:hover .submenu {
+  display: block;
+}
+
+#compare-worldwide {
+  text-align: center;
+}
+
+#compareForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#compareForm label {
+  font-weight: bold;
+}
+
+#comparisonResults canvas {
+  max-width: 45%;
+}
+
+#comparison-submenu {
+  display: none; /* Hidden by default */
+  margin-left: 10px; /* Indent for submenu */
+}
+
+#comparison-submenu button {
+  background-color: #3b4a6a;
+  color: #fff;
+  margin: 5px 0;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#comparison-submenu button:hover {
+  background-color: #2a3b5a;
+}
+
+footer {
+  margin-top: 0;
+  background-color: #4a5c7a;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 1000;
+}
+
+.autocomplete-suggestions {
+  position: absolute;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.autocomplete-item:hover {
+  background-color: #f0f0ee;
+}
+
+/* General Section Styling */
+#about {
+  padding: 50px 20px;
+  background-color: #f8f5e7; /* Light background for contrast */
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
+
+#about h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+  color: #4a5c7a; /* Matches your site's theme */
+}
+
+/* Subsection Headers */
+#about h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #4a5c7a;
+}
+
+/* Mission Section Styling */
+.mission .content,
+.importance .content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* For responsiveness */
+  gap: 20px; /* Space between text and image */
+  margin-bottom: 40px;
+}
+
+.mission .text,
+.importance .text {
+  flex: 1;
+  min-width: 300px; /* Ensures readability on small screens */
+}
+
+.mission .image img,
+.importance .image img {
+  max-width: 20%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  flex:  1;
+  min-width: 300px;
+}
+
+/* List Styling */
+#about ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  line-height: 1.6;
+}
+
+#about li {
+  margin-bottom: 10px;
+}
+
+#about p {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* How It Works and Educational Sections */
+.how-it-works,
+.education {
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.how-it-works p,
+.education ul {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Media Section Styling */
+.media {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.media h2 {
+  margin-bottom: 30px;
+}
+
+.video-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* For responsiveness */
+  gap: 20px;
+}
+
+.video-container iframe {
+  width: 100%;
+  max-width: 560px; /* YouTube video max width */
+  height: 315px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mission .content,
+  .importance .content {
+    flex-direction: column; /* Stack text and image vertically */
     text-align: center;
-    padding: 10px;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    z-index: 1000;
   }
+
+  .mission .text,
+  .importance .text {
+    margin-bottom: 20px;
+  }
+
+  .video-container iframe {
+    max-width: 100%; /* Full width for smaller devices */
+    height: auto;
+  }
+}

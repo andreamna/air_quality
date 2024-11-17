@@ -95,7 +95,7 @@
     </div>
   
     <!-- Line Chart Dropdown -->
-    <div id="dateRangeContainer" style="display: none; margin-top: 1rem;">
+    <div id="dateRangeContainer" style="display: none;">
       <label for="dateRange">Select Date Range:</label>
       <select id="dateRange" onchange="fetchDataForDateRange()">
         <option value="1d">1 Day</option>
@@ -123,37 +123,159 @@
     <option value="gaseous">Gaseous Pollutants (NOx, NH3, CO2, SO2)</option>
   </select>
 </div>
-
-
-
 <!-- Charts -->
+ <br>
+ <br>
 <canvas id="lineChart" style="display: none;"></canvas>
 <canvas id="barChart" style="display: none;"></canvas>
 <canvas id="doughnutChart" style="display: none;"></canvas>
 <br>
 <br>
   </section>
-  
   <!-- About Section -->
   <section id="about" class="content-section" style="display: none;">
-    <h2>About</h2>
-    <p>Learn more about our air quality monitoring project and the sources of data we use.</p>
+    <h1>About Us</h1>
+    
+    <!-- Mission Statement -->
+    <section class="mission">
+      <table class="mission-table">
+        <tr>
+          <!-- Text on the left -->
+          <td class="text">
+            <h2>Our Mission</h2>
+            <p>Our mission is to raise awareness about air pollution, provide real-time air quality data, and empower communities to make informed decisions for healthier lives.</p>
+          </td>
+          <!-- Image on the right -->
+          <td class="image">
+            <img src="airpollution.png" alt="Mission image" />
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- Why Air Quality Monitoring Matters Section -->
+    <section class="importance">
+      <table class="importance-table">
+        <tr>
+          <!-- Image on the left -->
+          <td class="image">
+            <img src="air-quality-monitoring.png" alt="Air quality matters image" />
+          </td>
+          <!-- Text on the right -->
+          <td class="text">
+            <h2>Why Air Quality Monitoring Matters</h2>
+            <ul>
+              <li><strong>Health Impacts:</strong> Pollutants like PM2.5, PM10, NOx, and SO2 can harm the lungs and overall health.</li>
+              <li><strong>Vulnerable Populations:</strong> Poor air quality affects children, the elderly, and individuals with respiratory conditions the most.</li>
+              <li><strong>Environmental Effects:</strong> Poor air quality contributes to smog, acid rain, and global warming.</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </section>
+  </div>
+  <!-- How This Website Works -->
+  <section class="how-it-works">
+    <h2>How This Website Works</h2>
+    <p>This website collects air quality data from trusted sources like the OpenWeatherMap API and public air monitoring stations. We present data about key pollutants, such as PM2.5 and NOx, in easy-to-understand charts and comparisons. Users can toggle between units and view detailed pollutant levels (measured in µg/m³).</p>
   </section>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-      <h3>Options</h3>
-        <button>Create Comparison Chart</button>
-        <button>Toggle Units (°C/°F)</button>
-        <button>Explore Historical Data</button>
-        <button>Explore Worldwide Data</button>
+  <!-- Educational Information -->
+  <section class="education">
+    <h2>Understanding Air Pollutants</h2>
+    <ul>
+      <li><strong>PM2.5 and PM10:</strong> Tiny particulate matter that can penetrate the lungs and cause respiratory problems.</li>
+      <li><strong>NOx (Nitrogen Oxides):</strong> Contributes to smog and acid rain.</li>
+      <li><strong>SO2 (Sulfur Dioxide):</strong> Affects breathing and can harm the environment.</li>
+      <li><strong>O3 (Ozone):</strong> Ground-level ozone harms health, while stratospheric ozone protects us from UV radiation.</li>
+      <li><strong>CO (Carbon Monoxide):</strong> A colorless, odorless gas harmful to health at high concentrations.</li>
+      <li><strong>NH3 (Ammonia):</strong> Common in agricultural emissions and contributes to air pollution.</li>
+    </ul>
+  </section>
+
+  <!-- Interactive Media -->
+  <section class="media">
+    <h2>Learn More About Air Quality</h2>
+    <div class="video-container">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/JmIYD6qjQ-k?si=OOfZ4oF4pUuafxAw" title="Air Pollution 101" frameborder="0" allowfullscreen></iframe>
     </div>
+  </section>
+</section>
+</section>
+  
+    
+  
+  <!-- Sidebar -->
+  <!-- Sidebar -->
+<div class="sidebar">
+  <h3>Options</h3>
+  <button onclick="toggleComparisonMenu()">Create Comparison Chart</button>
+  <div id="comparison-submenu" style="display: none; padding-left: 10px;">
+    <button onclick="showSection('compare-time-periods')">Compare Different Time Periods</button>
+    <button onclick="showSection('compare-worldwide')">Compare Worldwide Data</button>
+  </div>
+  <button onclick="toggleUnits()">Toggle Units (°C/°F)</button>
+</div>
 
+<!-- Compare Worldwide Data Section -->
+<section id="compare-worldwide" class="content-section" style="display: none;">
+  <h2>Compare Worldwide Data</h2>
+  <form id="compareForm">
+<!-- City input fields -->
+<div>
+  <label for="city1">City 1:</label>
+  <input
+    id="city1"
+    type="text"
+    oninput="showSuggestions('city1')"
+    placeholder="Ex: New York, US"
+  />
+  <div id="suggestions-city1" class="suggestions-box"></div>
+</div>
+<div>
+  <label for="city2">City 2:</label>
+  <input
+    id="city2"
+    type="text"
+    oninput="showSuggestions('city2')"
+    placeholder="Ex: Seoul, KR"
+  />
+  <div id="suggestions-city2" class="suggestions-box"></div>
+</div>
+
+    <label for="chartType">Chart Type:</label>
+    <select id="chartType" required>
+      <option value="bar">Bar Chart</option>
+      <option value="line">Line Chart</option>
+      <option value="radar">Radar Chart</option>
+      <option value="pie">Pie Chart</option>
+    </select>
+  
+    <button type="submit">Compare</button>
+  </form>  
+  <div id="comparison-charts" style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+    <div class="chart-container">
+      <canvas id="city1Chart" class="chart-canvas"></canvas>
+  </div>
+  <div class="chart-container">
+      <canvas id="city2Chart" class="chart-canvas"></canvas>
+  </div>
+  
+  </div>
+</section>
+
+
+  
   <!-- Footer -->
-   <footer>
-    <p>&copy; 2024 Air Quality Dashboard. All rights reserved.</p>
-   </footer>
-
+  <footer>
+    <div style="margin-bottom: 5px;">
+      <a href="https://instagram.com/unep" target="_blank" style="color: #fff; margin-right: 10px; text-decoration: none;">UNEP</a> |
+      <a href="https://instagram.com/earthdaynetwork" target="_blank" style="color: #fff; margin-left: 10px; text-decoration: none;">Earth Day Network</a> |
+      <a href="https://instagram.com/who" target="_blank" style="color: #fff; margin-left: 10px; text-decoration: none;">WHO</a>
+    </div>
+    <div>© 2024 Air Quality Dashboard.</div>
+  </footer>
+  
   <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
