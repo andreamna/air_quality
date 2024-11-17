@@ -690,7 +690,7 @@ function generateMockData(points, period) {
       // Fetch cities data and store it
       async function loadCities() {
         try {
-          const response = await fetch('simplified_cities.json'); // Update the path as necessary
+          const response = await fetch('https://andreamna.github.io/air_quality/simplified_cities.json'); // Update the path as necessary
           cities = await response.json();
         } catch (error) {
           console.error('Error loading cities:', error);
