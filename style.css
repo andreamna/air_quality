@@ -285,6 +285,7 @@ button:hover {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  padding-bottom: 40px;
 }
 
 #chartTypeButtons {
@@ -599,4 +600,20 @@ footer {
     max-width: 100%; /* Full width for smaller devices */
     height: auto;
   }
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0; /* Existing setting */
+  margin-bottom: 40px; /* Added extra space at the bottom */
+}
+
+#comparison-charts {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 50px; /* Added more space below the charts */
 }

@@ -842,6 +842,13 @@ function generateMockData(points, period) {
               maintainAspectRatio: true,
               aspectRatio: 1, // Adjust aspect ratio (e.g., 1 for square, 2 for rectangle)
               plugins: {
+                tooltip: {
+                  callbacks: {
+                      label: function(tooltipItem) {
+                          return tooltipItem.raw + ' µg/m³';
+                      }
+                  }
+              },
                   legend: {
                       position: 'top',
                   },
