@@ -801,8 +801,6 @@ function generateMockData(points, period) {
                 alert(error.message);
             });
     }
-    
-      
       // Render the selected chart
       function renderChart(chartId, airData, chartType, city) {
         const ctx = document.getElementById(chartId).getContext('2d');
