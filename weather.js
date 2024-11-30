@@ -1,23 +1,87 @@
 const apiKey = '642f7b103b1a8fe078e4dd6df0ef8721'; // Replace with your actual OpenWeather API key
-const lat = '35.1731'; // Latitude for Seoul
-const lon = '129.0714'; // Longitude for Seoul
+let lineChart, barChart, doughnutChart, polarAreaChart, pieChart;
+let lat, lon; // Global variables for latitude and longitude
 
-let lineChart, barChart, doughnutChart;
 // Function to display the main data section, hide the intro, and fetch data
 function displayData() {
-  document.getElementById('intro-section').style.display = 'none'; // Hide the intro section
-  document.getElementById('home').style.display = 'block'; // Show the data section
-  document.getElementById('home').scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the data section
-  
-  // Fetch weather and basic air quality status
-  fetchWeather();
-  fetchAirQualityStatus();
+  document.getElementById('intro-section').style.display = 'none';
+  document.getElementById('home').style.display = 'block';
+  document.getElementById('home').scrollIntoView({ behavior: "smooth" });
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        lat = position.coords.latitude.toFixed(6);
+        lon = position.coords.longitude.toFixed(6);
+
+        // Fetch weather and air quality data for the user's location
+        fetchWeather(lat, lon);
+        fetchAirQualityStatus(lat, lon).then(data => {
+          if (data) {
+            // Use the data for updating charts if necessary
+            updateBarChartWithRealData(data);
+            updateDoughnutChartWithRealData(data);
+            updateLineChartWithRealData(data);
+          }
+        });
+        fetchFiveDayForecast(lat, lon);
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        alert("Unable to retrieve location. Please allow location access.");
+      },
+      {
+        enableHighAccuracy: true,
+      }
+    );
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+
+function updateLineChartWithRealData(lat, lon) {
+  fetchWeatherHistory(lat, lon).then(data => {
+    if (data && lineChart) {
+      lineChart.data.labels = data.labels;
+      lineChart.data.datasets[0].data = data.temperatures;
+      lineChart.data.datasets[1].data = data.humidities;
+      lineChart.update();
+    }
+  }).catch(error => {
+    console.error('Error updating line chart:', error);
+  });
+}
+
+function updateBarChartWithRealData(data) {
+    if (data && barChart) {
+      barChart.data.datasets[0].data = [
+        data.pm2_5,
+        data.pm10,
+        data.no2,
+        data.nh3,
+        data.co,
+        data.so2,
+      ];
+      barChart.update();
+    } 
+}
+
+function updateDoughnutChartWithRealData(data) {
+    if (data && doughnutChart) {
+      doughnutChart.data.datasets[0].data = [
+        data.pm2_5,
+        data.pm10,
+        data.no2,
+        data.nh3,
+        data.co,
+        data.so2,
+      ];
+      doughnutChart.update();
+    } 
 }
 
 // Set up the event listener on the button to trigger displayData function
 document.getElementById("displayDataButton").addEventListener("click", displayData);
-
-// Function to show a specific section and hide others
 function showSection(sectionId) {
   // Hide all sections
   document.querySelectorAll('.content-section, #intro-section').forEach((section) => {
@@ -28,15 +92,12 @@ function showSection(sectionId) {
   const targetSection = document.getElementById(sectionId);
   if (targetSection) {
     targetSection.style.display = 'block';
-    console.log(`Showing section: ${sectionId}`); // Debugging
   }
 }
 
-
-// Function to fetch weather data
-function fetchWeather() {
+// Modified fetchWeather function to accept latitude and longitude as parameters
+function fetchWeather(lat, lon) {
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-
   fetch(weatherUrl)
     .then(response => {
       if (!response.ok) {
@@ -45,9 +106,21 @@ function fetchWeather() {
       return response.json();
     })
     .then(data => {
-      document.getElementById('temperature').textContent = data.main.temp;
-      document.getElementById('humidity').textContent = data.main.humidity;
-      
+      // Update current weather details on the webpage
+      document.getElementById('temperature').textContent = data.main.temp.toFixed(1);
+      document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+      document.getElementById('feels-like').textContent = data.main.feels_like.toFixed(1) + "°C";
+      document.getElementById('pressure').textContent = data.main.pressure + " hPa";
+      document.getElementById('wind-speed').textContent = data.wind.speed + " m/s";
+      document.getElementById('visibility').textContent = (data.visibility / 1000).toFixed(1) + " km";
+
+      // Sunrise and sunset times
+      const sunriseTime = new Date(data.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const sunsetTime = new Date(data.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('sunrise').textContent = sunriseTime;
+      document.getElementById('sunset').textContent = sunsetTime;
+
+      // Set weather icon and description
       const weatherIcon = document.getElementById('weather-icon');
       switch (data.weather[0].main) {
         case 'Clear':
@@ -65,17 +138,102 @@ function fetchWeather() {
         default:
           weatherIcon.textContent = '🌈';
       }
+      const city = data.name;
+      document.getElementById('title').textContent = `Today's Current Data in ${city}`;
     })
     .catch(error => {
       console.error('Error fetching weather data:', error);
     });
 }
 
-// Function to fetch only air quality status for initial display
-function fetchAirQualityStatus() {
+// Function to update date and time
+function updateDateTime() {
+  const dateElement = document.getElementById('current-date');
+  const timeElement = document.getElementById('current-time');
+  const now = new Date();
+
+  // Format date (e.g., "November 27, 2024")
+  const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  dateElement.textContent = now.toLocaleDateString('en-US', dateOptions);
+
+  // Format time (e.g., "12:00 PM")
+  const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+  timeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
+}
+
+function fetchFiveDayForecast(lat, lon) {
+  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+
+  fetch(forecastUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+      const forecastCards = document.getElementById('forecast-cards');
+      forecastCards.innerHTML = ''; // Clear any existing content
+
+      const dailyData = {};
+      data.list.forEach(item => {
+        const date = new Date(item.dt * 1000).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+
+        if (!dailyData[date]) {
+          dailyData[date] = {
+            tempSum: 0,
+            count: 0,
+            weatherIcon: item.weather[0].main,
+          };
+        }
+
+        dailyData[date].tempSum += item.main.temp;
+        dailyData[date].count += 1;
+      });
+
+      Object.keys(dailyData).slice(0, 5).forEach(date => {
+        const avgTemp = (dailyData[date].tempSum / dailyData[date].count).toFixed(1);
+        const dayCard = document.createElement('div');
+        dayCard.classList.add('forecast-card');
+
+        let iconSymbol = '';
+        switch (dailyData[date].weatherIcon) {
+          case 'Clear':
+            iconSymbol = '☀️';
+            break;
+          case 'Clouds':
+            iconSymbol = '☁️';
+            break;
+          case 'Rain':
+            iconSymbol = '🌧️';
+            break;
+          case 'Snow':
+            iconSymbol = '❄️';
+            break;
+          default:
+            iconSymbol = '🌈';
+        }
+
+        dayCard.innerHTML = `
+          <p class="forecast-date">${date}</p>
+          <div class="forecast-icon">${iconSymbol}</div>
+          <p class="forecast-temp">${avgTemp}°C</p>
+        `;
+
+        forecastCards.appendChild(dayCard);
+        
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching 5-day forecast data:', error);
+    });
+}
+
+// Modified fetchAirQualityStatus function to accept latitude and longitude as parameters
+function fetchAirQualityStatus(lat, lon) {
   const airQualityUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 
-  fetch(airQualityUrl)
+  return fetch(airQualityUrl)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
@@ -84,8 +242,11 @@ function fetchAirQualityStatus() {
     })
     .then(data => {
       const pollution = data.list[0].components;
+
+      // Calculate average air quality
       const averageAQ = (pollution.pm2_5 + pollution.pm10 + pollution.co + pollution.no2 + pollution.so2 + pollution.nh3) / 6;
 
+      // Update air quality status
       const airQualityStatus = document.getElementById('air-quality-status');
       airQualityStatus.classList.remove('good', 'average', 'bad'); // Clear any existing classes
 
@@ -101,33 +262,63 @@ function fetchAirQualityStatus() {
         airQualityStatus.classList.add('bad');
       }
       airQualityStatus.textContent = statusText;
+
+      // Update detailed pollutant data
+      document.getElementById('pm25').textContent = pollution.pm2_5;
+      document.getElementById('pm10').textContent = pollution.pm10;
+      document.getElementById('co').textContent = pollution.co;
+      document.getElementById('no2').textContent = pollution.no2;
+      document.getElementById('so2').textContent = pollution.so2;
+      document.getElementById('nh3').textContent = pollution.nh3;
+
+      document.getElementById('average-aq').textContent = averageAQ.toFixed(2);
+      document.getElementById('aq-status').textContent = statusText;
+      return pollution;
     })
     .catch(error => console.error('Error fetching air quality status:', error));
 }
 
-function fetchAirQualityData() {
-  const airQualityUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+// Function to load and display detailed air quality data
+function loadDetailedData() {
+  // Show detailed pollutants data within air quality card
+  const pollutantsData = document.getElementById('pollutants-data');
+  pollutantsData.style.display = 'block';
 
-  return fetch(airQualityUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to fetch air quality data');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Extract relevant components
-      const components = data.list[0].components;
-      return {
-        pm2_5: components.pm2_5,
-        pm10: components.pm10,
-        no2: components.no2,
-        so2: components.so2,
-        co: components.co,
-        nh3: components.nh3,
-      };
-    });
+  // Show air quality explanation in the bottom right
+  const airQualityExplanationCard = document.getElementById('air-quality-explanation-card');
+  airQualityExplanationCard.style.display = 'block';
+
+  // Hide air quality status and load button after data is loaded
+  document.getElementById('air-quality-status').style.display = 'none';
+  document.querySelector('#air-quality-card button').style.display = 'none';
+
+  // Fetch air quality data
+  fetchAirQualityStatus(lat, lon); // Pass the user's latitude and longitude here
 }
+
+// Update date and time once on page load and every second
+document.addEventListener('DOMContentLoaded', function() {
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+
+  // Automatically ask for location and fetch data on load
+  displayData();
+});
+
+window.loadDetailedData = loadDetailedData;
+window.displayData = displayData;
+
+// Ensure the default section (intro) is displayed on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Ensure only the intro section is visible initially
+  document.getElementById('intro-section').style.display = 'block';
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('charts').style.display = 'none';
+  document.getElementById('about').style.display = 'none';
+  document.querySelector('.sidebar').style.display = 'block';
+  document.querySelector('footer').style.display = 'block';
+
+});
 
 function fetchWeatherHistory() {
   const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
@@ -153,90 +344,6 @@ function fetchWeatherHistory() {
 
       return { labels, temperatures, humidities };
     });
-}
-
-function updateLineChartWithRealData() {
-  fetchWeatherHistory().then(data => {
-    lineChart.data.labels = data.labels;
-    lineChart.data.datasets[0].data = data.temperatures;
-    lineChart.data.datasets[1].data = data.humidities;
-    lineChart.update();
-  });
-}
-
-// Function to load and display detailed air quality data
-function loadDetailedData() {
-  const detailedDataSection = document.getElementById('detailed-data');
-  detailedDataSection.style.display = 'block'; // Show the detailed data section
-
-  const airQualityUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-
-  fetch(airQualityUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
-      }
-      return response.json();
-    })
-    .then(data => {
-      const pollution = data.list[0].components;
-      const averageAQ = (pollution.pm2_5 + pollution.pm10 + pollution.co + pollution.no2 + pollution.so2 + pollution.nh3) / 6;
-
-      document.getElementById('pm25').textContent = pollution.pm2_5;
-      document.getElementById('pm10').textContent = pollution.pm10;
-      document.getElementById('co').textContent = pollution.co;
-      document.getElementById('no2').textContent = pollution.no2;
-      document.getElementById('so2').textContent = pollution.so2;
-      document.getElementById('nh3').textContent = pollution.nh3;
-
-      // Determine air quality status and update explanation
-      const statusText = averageAQ < 50 ? 'Good' : averageAQ < 100 ? 'Average' : 'Bad';
-      document.getElementById('average-aq').textContent = averageAQ.toFixed(2);
-      document.getElementById('aq-status').textContent = statusText;
-    })
-    .catch(error => {
-      console.error('Error fetching detailed air quality data:', error);
-    });
-}
-
-// Ensure the default section (intro) is displayed on page load
-document.addEventListener('DOMContentLoaded', () => {
-  // Ensure only the intro section is visible initially
-  document.getElementById('intro-section').style.display = 'block';
-  document.getElementById('home').style.display = 'none';
-  document.getElementById('charts').style.display = 'none';
-  document.getElementById('about').style.display = 'none';
-  document.querySelector('.sidebar').style.display = 'block';
-  document.querySelector('footer').style.display = 'block';
-
-});
-
-function updateBarChartWithRealData() {
-  fetchAirQualityData().then(data => {
-    barChart.data.datasets[0].data = [
-      data.pm2_5,
-      data.pm10,
-      data.no2,
-      data.nh3,
-      data.co,
-      data.so2,
-    ];
-    barChart.update();
-  });
-}
-
-function updateDoughnutChartWithRealData() {
-  fetchAirQualityData().then(data => {
-    doughnutChart.data.datasets[0].data = [
-      data.pm2_5,
-      data.pm10,
-      data.no2,
-      data.nh3,
-      data.co,
-      data.so2,
-    ];
-    doughnutChart.update();
-  });
 }
 
 function showBarChart() {
@@ -638,24 +745,209 @@ function generateMockData(points, period) {
       }
   });
 
-  document.getElementById("barChartFilter").addEventListener("change", (event) => {
-    const filter = event.target.value;
-    fetchAirQualityData().then((data) => {
-      let filteredData;
-      if (filter === "all") {
-        filteredData = [data.pm2_5, data.pm10, data.no2, data.nh3, data.co, data.so2];
-      } else if (filter === "particulate") {
-        filteredData = [data.pm2_5, data.pm10];
-      } else if (filter === "gaseous") {
-        filteredData = [data.no2, data.nh3, data.co, data.so2];
-      }
-      updateBarChart(filteredData);
+  document.addEventListener("DOMContentLoaded", () => {
+    // Polar Area Chart Initialization
+    const polarAreaChartCtx = document.getElementById('polarAreaChart').getContext('2d');
+    polarAreaChart = new Chart(polarAreaChartCtx, {
+        type: 'polarArea',
+        data: {
+            labels: ['PM2.5', 'PM10', 'NO2', 'NH3', 'CO', 'SO2'],
+            datasets: [{
+                data: [], // Fill with data after uploading the file
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 205, 86, 0.6)',
+                    'rgba(255, 105, 180, 0.6)', // Additional color if needed
+                    'rgba(255, 215, 0, 0.6)' 
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        color: '#333'
+                    }
+                }
+            }
+        }
     });
+
+    // Pie Chart Initialization
+    const pieChartCtx = document.getElementById('pieChart').getContext('2d');
+    pieChart = new Chart(pieChartCtx, {
+        type: 'pie',
+        data: {
+            labels: ['PM2.5', 'PM10', 'NO2', 'NH3', 'CO', 'SO2'],
+            datasets: [{
+                data: [], // Fill with data after uploading the file
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 205, 86, 0.6)',
+                    'rgba(255, 105, 180, 0.6)', // Additional color if needed
+                    'rgba(255, 215, 0, 0.6)' 
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        color: '#333'
+                    }
+                }
+            }
+        }
+    });
+});
+
+function showCharts() {
+  const chartsContainer = document.getElementById('charts-container');
+  chartsContainer.style.display = 'flex';  // Change to flex to align charts correctly
+}
+
+// Utility function to calculate the average of an array
+function getAverage(dataArray) {
+  if (dataArray.length === 0) return 0; // Return 0 if no data to average
+  const sum = dataArray.reduce((acc, value) => acc + value, 0);
+  return sum / dataArray.length; // Calculate average
+}
+
+function handleExcelUpload() {
+  const fileInput = document.getElementById('excel-file');
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert('Please select an Excel file!');
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(event) {
+    console.log("File successfully read.");
+    const data = new Uint8Array(event.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    console.log("Workbook loaded.");
+ 
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+    console.log("Parsed JSON Data:", jsonData);
+
+    // Now update the charts using the parsed data
+    updateChartFromExcel(jsonData);
+    document.getElementById('charts-container').style.display = 'flex';
+
+    // Add a short delay before resizing charts to ensure they are properly displayed
+    setTimeout(() => {
+      if (pieChart) {
+        console.log("Forcing Pie Chart to resize...");
+        pieChart.resize(); // Force the pie chart to resize/redraw
+      }
+
+      if (polarAreaChart) {
+        console.log("Forcing Polar Area Chart to resize...");
+        polarAreaChart.resize(); // Force the polar area chart to resize/redraw
+      }
+    }, 100); // Adjust the timeout duration if necessary (100 ms)
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+function updateChartFromExcel(parsedData) {
+  if (parsedData.length === 0) {
+    alert("No valid data found in the Excel file.");
+    return;
+  }
+
+  // Extract pollutant values from Excel data
+  const pollutantsData = {
+    "PM2.5": [],
+    "PM10": [],
+    "NO": [],
+    "CO": [],
+    "NO2": [],
+    "SO2": [], // Added for USA data
+    "O3": [],  // Added for USA data
+    "NH3": []
+  };
+
+  parsedData.forEach(item => {
+    const pollutant = item.Pollutant.trim();
+    console.log('Identified Pollutant:', pollutant); // Add this for debugging
+    const value = parseFloat(item.Value);
+    if (pollutantsData[pollutant] !== undefined && !isNaN(value)) {
+      pollutantsData[pollutant].push(value);
+    }
   });
+
+  // Calculate average values for each pollutant
+  const avgValues = Object.keys(pollutantsData).map(pollutant => {
+    return getAverage(pollutantsData[pollutant]);
+  });
+  console.log("Average Values:", avgValues);
+
+  
+  updateXPieChart(avgValues);
+  updateXPolarAreaChart(avgValues);
+}
+
+function updateXPieChart(avgValues) {
+  if (pieChart) {
+    console.log("Updating Pie Chart with:", avgValues);
+    pieChart.data.datasets[0].data = avgValues;
+    pieChart.update();
+  }
+}
+
+function updateXPolarAreaChart(avgValues) {
+  if (polarAreaChart) {
+    console.log("Updating Polar Area Chart with:", avgValues);
+    polarAreaChart.data.datasets[0].data = avgValues;
+    polarAreaChart.update();
+  }
+}
+
+document.getElementById("barChartFilter").addEventListener("change", (event) => {
+  const filter = event.target.value;
+  fetchAirQualityStatus(lat, lon).then((data) => {
+    let filteredData;
+    if (filter === "all") {
+      filteredData = [data.pm2_5, data.pm10, data.no2, data.nh3, data.co, data.so2];
+    } else if (filter === "particulate") {
+      filteredData = [data.pm2_5, data.pm10];
+    } else if (filter === "gaseous") {
+      filteredData = [data.no2, data.nh3, data.co, data.so2];
+    }
+    updateBarChart(filteredData);
+  });
+});
   
   document.getElementById("doughnutChartFilter").addEventListener("change", (event) => {
     const filter = event.target.value;
-    fetchAirQualityData().then((data) => {
+    fetchAirQualityStatus(lat, lon).then((data) => {
       let filteredData;
       if (filter === "all") {
         filteredData = [data.pm2_5, data.pm10, data.no2, data.nh3, data.co, data.so2];
@@ -800,7 +1092,7 @@ function generateMockData(points, period) {
                 console.error('Error fetching data:', error);
                 alert(error.message);
             });
-    }
+    } 
       // Render the selected chart
       function renderChart(chartId, airData, chartType, city) {
         const ctx = document.getElementById(chartId).getContext('2d');
@@ -860,4 +1152,4 @@ function generateMockData(points, period) {
         }
         new Chart(ctx, config);
       }
-      
+

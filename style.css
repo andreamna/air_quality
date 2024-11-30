@@ -15,7 +15,11 @@ body {
 h1, h2, h3 {
   text-align: center;
   font-family: 'Poppins', sans-serif;
-  padding-left: 20px;
+}
+
+.detailed-data-container h3 {
+  font-size: 1.2em; /* Decrease the font size slightly */
+  white-space: nowrap; /* Prevent wrapping of the text */
 }
 
 /* Header styling */
@@ -127,22 +131,58 @@ section {
 
 /* Dashboard Styling */
 .dashboard-container {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
   padding: 20px;
-  width: 80%; /* Width of the dashboard container */
-  margin: 0 auto; /* Center dashboard within main */
+  width: 90%;
+  margin: 0 auto;
+}
+
+.large-card {
+  grid-column: span 2; /* Make it occupy twice the width */
+  grid-row: span 2;    /* Make it larger vertically */
+}
+
+.medium-card {
+  grid-column: span 1; /* Slightly larger */
+  grid-row: span 1;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem;
+  padding: 0 2rem;
 }
 
 .dashboard-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 15px;
   text-align: center;
-  width: 30%;
-  background-color: #ffffff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.detailed-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create 3 columns */
+  grid-gap: 20px; /* Add some spacing between the cards */
+  padding: 20px;
+}
+
 
 .dashboard-card p {
   font-size: 1.8em; 
@@ -156,10 +196,162 @@ section {
   color: #2a3b5a;
 }
 
+.forecast-cards {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  justify-content: space-between;  /* Space out the cards without scrolling */
+}
+
+.forecast-card {
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100px;  /* Increase the width of each forecast card */
+  text-align: center;
+}
+
+.forecast-card .forecast-date {
+  font-weight: 700;
+}
+#seven-day-forecast {
+  grid-column: span 5;  /* Make the forecast card span 3 columns to make it wider */
+  grid-row: span 1;     
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.pressure-icon, .visibility-icon , .thermometer-icon{
+  font-size: 2rem;  /* Adjust as needed */
+  margin-right: 10px; /* Spacing between the icon and the value */
+}
+
+.forecast-icon {
+  font-size: 2em;
+  margin: 5px 0;
+}
+
+.forecast-temp {
+  font-size: 1.2em;
+}
+
+.wind-container {
+  display: flex;
+  align-items: center;
+}
+
+.wind-icon {
+  font-size: 2rem;
+  margin-right: 10px;
+}
+
 .icon {
   font-size: 3em;
   margin-bottom: 10px;
   color: #fcb54a;
+}
+/* Center the content in the air quality card */
+.air-quality-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* Center horizontally */
+  justify-content: center;  /* Center vertically */
+  height: 100%;  /* Ensure the div takes the full height of the card */
+}
+
+#air-quality-status {
+  font-size: 2.5em;  /* Increase the font size for the air quality status */
+  font-weight: bold; 
+  margin-bottom: 20px;  /* Add some spacing between the text and the button */
+}
+
+#air-quality-card button {
+  margin-top: 0;
+}
+
+#detailed-air-quality-card {
+  grid-column: span 2;  /* Adjust column span as per your design */
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for Date and Time */
+.date-time-container {
+  margin-top: 15px; /* Adds some spacing between the temperature and the date/time */
+  text-align: center; /* Centers both date and time within the card */
+}
+
+.date-text, .time-text {
+  font-size: 1.5em; /* Matches the font size of other card texts */
+  font-weight: bold; /* Makes the text bold like the other values */
+  color: #333; /* Matches the color of other card texts */
+  margin-top: 5px; /* Adds spacing above each date/time text */
+}
+
+/* Optional: Align the calendar and clock icons to make them match other icons */
+.calendar-icon, .clock-icon {
+  font-size: 1.5em; /* Makes the icon size consistent */
+  margin-right: 5px; /* Adds spacing between the icon and the text */
+  vertical-align: middle; /* Aligns the icon vertically with the text */
+}
+
+.detailed-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  font-size: 1.5em; /* Adjusted for better readability within the card */
+}
+
+#pollutants-data {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr)); /* Two columns for pollutants data */
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+
+#air-quality-explanation-card {
+  grid-column: span 3;  /* Occupies the width of 2 columns */
+  grid-row: span 2;
+  padding: 20px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+#sunrise-sunset-card {
+  grid-column: span 3;  /* Span over 3 columns */
+  grid-row: span 1;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sunrise-sunset-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.sunrise-sunset-table td {
+  padding: 10px;
+  font-size: 1.8em;  /* Match the font size of other cards */
+  font-weight: bold;
+  color: #333;
+  vertical-align: middle;
+}
+
+.sunrise-icon, .sunset-icon {
+  font-size: 1.5em;  /* Adjust the size of the emoji */
+  margin-left: 10px;
 }
 
 .status {
@@ -198,7 +390,6 @@ section {
   color: red;
 }
 
-
 button {
   margin-top: 10px;
   padding: 8px 16px;
@@ -208,30 +399,13 @@ button {
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 button:hover {
   background-color: #e0e0e0;
 }
 
-/* Sidebar styling */
-
-.detailed-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.detailed-card {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px 20px;
-  margin: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: 1.2em;
-  width: 120px;
-}
 
 .explanation-text {
   text-align: center;
@@ -372,36 +546,6 @@ button:hover {
   position: relative;
 }
 
-/* Submenu styling */
-/* Submenu styling */
-.submenu {
-  display: none; /* Hidden by default */
-  position: absolute;
-  top: 50px; /* Adjust to position the submenu below the parent button */
-  left: 0;
-  background-color: #4a5c7a;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-  padding: 10px;
-}
-
-.submenu button {
-  width: 100%;
-  padding: 8px;
-  margin: 5px 0;
-  background-color: #3b4a6a;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.submenu button:hover {
-  background-color: #2a3b5a;
-}
-
 /* Show submenu on hover */
 .menu-item:hover .submenu {
   display: block;
@@ -424,25 +568,6 @@ button:hover {
 
 #comparisonResults canvas {
   max-width: 45%;
-}
-
-#comparison-submenu {
-  display: none; /* Hidden by default */
-  margin-left: 10px; /* Indent for submenu */
-}
-
-#comparison-submenu button {
-  background-color: #3b4a6a;
-  color: #fff;
-  margin: 5px 0;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-#comparison-submenu button:hover {
-  background-color: #2a3b5a;
 }
 
 footer {
@@ -617,3 +742,51 @@ footer {
   margin-top: 20px;
   margin-bottom: 50px; /* Added more space below the charts */
 }
+
+.weather-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.icon img {
+  width: 30px;
+  height: 30px;
+}
+
+/* General style for the content section */
+#excel-upload-section {
+  display: flex; /* Initially hidden */
+  padding: 40px;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#charts-container {
+  display: flex;
+  flex-wrap: wrap;  /* This allows the charts to wrap if they don’t fit side by side */
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;      /* Ensures it uses available space */
+  min-height: 400px; /* Prevent collapsing */
+  visibility: visible;
+}
+
+#charts-container canvas {
+  flex: 1;  /* Ensures both charts take available space equally */
+  max-width: 45%;
+}
+
+
+

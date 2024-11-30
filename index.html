@@ -33,50 +33,109 @@
 
   <!-- Home Section (Initially Hidden) -->
   <section id="home" class="content-section" style="display: none;">
-    <h2>Today's current data</h2>
+    <h2 id="title"></h2>
     <div class="dashboard-container">
-      <div class="dashboard-card" id="temperature-card">
+      <!-- Weather and Air Quality Cards -->
+      <div class="dashboard-card large-card" id="temperature-card">
         <h3>Temperature</h3>
         <div class="icon" id="weather-icon">☀️</div>
-        <p><span id="temperature">--</span>°C</p>
-      </div>
-      <div class="dashboard-card" id="humidity-card">
+            <p><span id="temperature">--</span>°C</p>
+            <div class="date-time-container">
+                <div class="date-container">
+                    <span class="calendar-icon"><br>📅</span>
+                    <p id="current-date" class="date-text"></p>
+                </div>
+                <div class="time-container">
+                    <span class="clock-icon"><br>⏰</span>
+                    <p id="current-time" class="time-text"></p>
+                </div>
+        </div>
+    </div>    
+      <div class="dashboard-card medium-card" id="humidity-card">
         <h3>Humidity</h3>
         <div class="humidity-icon">💧</div>
-        <p><span id="humidity">--</span>%</p>
+        <p><span id="humidity">--</span></p>
       </div>
-      <div class="dashboard-card" id="air-quality-card">
+      <div class="dashboard-card large-card" id="air-quality-card">
         <h3>Air Quality</h3>
         <div id="air-quality-status" class="status">Loading...</div>
         <br>
         <button onclick="loadDetailedData()">Load Data</button>
-      </div>
+        <div class="detailed-cards" id="pollutants-data" style="display: none;">
+            <div class="detailed-card"><strong>PM2.5:</strong> <span id="pm25">--</span> µg/m³</div>
+            <div class="detailed-card"><strong>PM10:</strong> <span id="pm10">--</span> µg/m³</div>
+            <div class="detailed-card"><strong>CO:</strong> <span id="co">--</span> µg/m³</div>
+            <div class="detailed-card"><strong>NO2:</strong> <span id="no2">--</span> µg/m³</div>
+            <div class="detailed-card"><strong>SO2:</strong> <span id="so2">--</span> µg/m³</div>
+            <div class="detailed-card"><strong>NH3:</strong> <span id="nh3">--</span> µg/m³</div>
+        </div>
     </div>
-    <!-- Detailed Air Quality Data Section (Initially Hidden) -->
-    <div id="detailed-data" class="detailed-data-container" style="display: none;">
-      <h3>Detailed Air Quality Data</h3>
-      <div class="detailed-cards">
-        <div class="detailed-card"><strong>PM2.5:</strong> <span id="pm25">--</span> µg/m³</div>
-        <div class="detailed-card"><strong>PM10:</strong> <span id="pm10">--</span> µg/m³</div>
-        <div class="detailed-card"><strong>CO:</strong> <span id="co">--</span> µg/m³</div>
-        <div class="detailed-card"><strong>NO2:</strong> <span id="no2">--</span> µg/m³</div>
-        <div class="detailed-card"><strong>SO2:</strong> <span id="so2">--</span> µg/m³</div>
-        <div class="detailed-card"><strong>NH3:</strong> <span id="nh3">--</span> µg/m³</div>
+
+        <div class="dashboard-card" id="feels-like-card">
+          <h3>Feels Like</h3>
+          <span class="thermometer-icon">🌡️</span>
+          <p><span id="feels-like">4.1</span></p>
       </div>
 
-      <p id="air-quality-explanation" class="explanation-text">
-        <strong>Air quality criteria:</strong><br><br>
-        <span class="criteria-line"><span class="good-label">Good:</span> Average is below 50 µg/m³</span><br>
-        <span class="criteria-line"><span class="average-label">Average:</span> Between 50 and 100 µg/m³</span><br>
-        <span class="criteria-line"><span class="bad-label">Bad:</span> Above 100 µg/m³</span><br><br>
-        <strong>Currently:</strong> The average air quality is <span class="highlighted-text"><strong><span id="average-aq">--</span> µg/m³</strong></span>, which is considered <span class="highlighted-text"><strong><span id="aq-status">--</span></strong></span>
-        <br><br>
-      </p>      
-</div>
+      <div class="dashboard-card" id="pressure-card">
+        <h3>Pressure</h3>
+        <span class="pressure-icon">🧭</span> 
+        <p><span id="pressure">--</span></p>
+      </div>
+      
+      <div class="dashboard-card" id="visibility-card">
+        <h3>Visibility</h3>
+        <span class="visibility-icon">👁️</span>
+        <p><span id="visibility">--</span></p>
+      </div>      
+      <!-- Wind Speed Card (Updated with icon and similar layout to humidity card) -->
+      <div class="dashboard-card medium-card" id="wind-speed-card">
+        <h3>Wind Speed</h3>
+        <div class="wind-icon">💨</div>
+        <br>
+        <p><span id="wind-speed">--</span></p>
+      </div>
+      <div class="dashboard-card large-card" id="sunrise-sunset-card">
+        <h3>Sunrise & Sunset</h3>
+        <table class="sunrise-sunset-table">
+          <tr>
+            <td><span id="sunrise">--:--</span> AM</td>
+            <td><span class="sunrise-icon">🌅</span></td>
+          </tr>
+          <tr>
+            <td><span id="sunset">--:--</span> PM</td>
+            <td><span class="sunset-icon">🌇</span></td>
+          </tr>
+        </table>
+      </div>
+      
+      <div id="seven-day-forecast" class="dashboard-card large-card">
+        <h3>5-Day Forecast</h3>
+        <div id="forecast-cards" class="forecast-cards">
+          <!-- The 7-day forecast items will be inserted here dynamically -->
+        </div>
+      </div>
+      <!-- New Detailed Air Quality Data Card -->
+      <div class="dashboard-card large-card" id="air-quality-explanation-card" style="display: none;">
+            <h3>Air Quality Criteria</h3>
+            <div id="air-quality-explanation" class="explanation-text">
+                <span class="criteria-line"><span class="good-label">Good:</span> Average is below 50 µg/m³</span>
+                <span class="criteria-line"><span class="average-label">Average:</span> Between 50 and 100 µg/m³</span>
+                <span class="criteria-line"><span class="bad-label">Bad:</span> Above 100 µg/m³</span>
+                <strong>Currently:</strong> The average air quality is 
+                <span class="highlighted-text">
+                    <strong><span id="average-aq">--</span> µg/m³</strong>
+                </span>, 
+                which is considered 
+                <span class="highlighted-text">
+                    <strong><span id="aq-status">--</span></strong>
+                </span>
+            </div>
+        </div>
   </section>
 
-  <!-- Charts Section -->
-  <section id="charts" class="content-section" style="display: none;">
+   <!-- Charts Section -->
+   <section id="charts" class="content-section" style="display: none;">
     <h2>Charts</h2>
     
     <!-- Chart Type Buttons -->
@@ -210,12 +269,8 @@
   <!-- Sidebar -->
 <div class="sidebar">
   <h3>Options</h3>
-  <button onclick="toggleComparisonMenu()">Create Comparison Chart</button>
-  <div id="comparison-submenu" style="display: none; padding-left: 10px;">
-    <button onclick="showSection('compare-time-periods')">Compare Different Time Periods</button>
-    <button onclick="showSection('compare-worldwide')">Compare Worldwide Data</button>
-  </div>
-  <button onclick="toggleUnits()">Toggle Units (°C/°F)</button>
+  <button onclick="showSection('compare-worldwide')">Compare Worldwide Data</button>
+  <button onclick="showSection('excel-upload-section')">Upload Excel Data</button>
 </div>
 
 <!-- Compare Worldwide Data Section -->
@@ -265,7 +320,18 @@
   </div>
 </section>
 
-  
+<section id="excel-upload-section" class="content-section" style="display: none;">
+  <h4>Upload Excel Data</h4>
+  <br>
+  <input type="file" id="excel-file" accept=".xlsx" />
+  <br><br>
+  <button onclick="handleExcelUpload()">Upload</button>
+  <div id="charts-container" style="display: none;">
+    <canvas id="pieChart" width="400" height="200"></canvas>
+    <canvas id="polarAreaChart" width="400" height="200"></canvas>
+  </div>
+</section>
+
   <!-- Footer -->
   <footer>
     <div style="margin-bottom: 5px;">
@@ -280,5 +346,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
   <script src="weather.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
