@@ -778,7 +778,16 @@ function generateMockData(points, period) {
                         },
                         color: '#333'
                     }
-                }
+                },
+                tooltip: {
+                  callbacks: {
+                      // Customize the tooltip label
+                      label: function(tooltipItem) {
+                          let value = tooltipItem.raw; // The value from the dataset
+                          return value + ' µg/m³'; // Append the unit
+                      }
+                  }
+              }
             }
         }
     });
@@ -815,7 +824,16 @@ function generateMockData(points, period) {
                         },
                         color: '#333'
                     }
-                }
+                },
+                tooltip: {
+                  callbacks: {
+                      // Customize the tooltip label
+                      label: function(tooltipItem) {
+                          let value = tooltipItem.raw; // The value from the dataset
+                          return value + ' µg/m³'; // Append the unit
+                      }
+                  }
+              }
             }
         }
     });
