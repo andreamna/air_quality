@@ -6,6 +6,7 @@ The Air Quality Dashboard is a web application designed to raise awareness about
 - **Real-time Air Quality Monitoring:** Displays current weather conditions, air quality status, and pollutant levels in an easy-to-understand format.
 - **Compare Air Quality:** Select two cities and compare their air quality metrics (PM2.5, PM10, CO, NO2, SO2, NH3).
 - **Interactive Charts:** Visualize pollutant levels using bar, pie, and line charts.
+- **Visualize Excel Data:** Upload your own excel file with air pollutant data to visualize it.
 - **Educational Resources:** Learn about air pollutants and their impacts through the "About Us" page.
 - **Real-Time Data:** Powered by the OpenWeatherMap API for real-time air quality data.
 

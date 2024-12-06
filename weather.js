@@ -1,8 +1,7 @@
-const apiKey = '642f7b103b1a8fe078e4dd6df0ef8721'; // Replace with your actual OpenWeather API key
+const apiKey = '642f7b103b1a8fe078e4dd6df0ef8721'; 
 let lineChart, barChart, doughnutChart, polarAreaChart, pieChart;
-let lat, lon; // Global variables for latitude and longitude
+let lat, lon; 
 
-// Function to display the main data section, hide the intro, and fetch data
 function displayData() {
   document.getElementById('intro-section').style.display = 'none';
   document.getElementById('home').style.display = 'block';
@@ -11,8 +10,8 @@ function displayData() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        lat = position.coords.latitude.toFixed(6);
-        lon = position.coords.longitude.toFixed(6);
+        lat = position.coords.latitude.toFixed(8);
+        lon = position.coords.longitude.toFixed(8);
 
         // Fetch weather and air quality data for the user's location
         fetchWeather(lat, lon);
@@ -80,12 +79,11 @@ function updateDoughnutChartWithRealData(data) {
     } 
 }
 
-// Set up the event listener on the button to trigger displayData function
 document.getElementById("displayDataButton").addEventListener("click", displayData);
 function showSection(sectionId) {
   // Hide all sections
   document.querySelectorAll('.content-section, #intro-section').forEach((section) => {
-    section.style.display = 'none'; // Hide all other sections
+    section.style.display = 'none'; 
   });
 
   // Show the selected section
@@ -95,7 +93,6 @@ function showSection(sectionId) {
   }
 }
 
-// Modified fetchWeather function to accept latitude and longitude as parameters
 function fetchWeather(lat, lon) {
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
   fetch(weatherUrl)
@@ -139,24 +136,21 @@ function fetchWeather(lat, lon) {
           weatherIcon.textContent = '🌈';
       }
       const city = data.name;
-      document.getElementById('title').textContent = `Today's Current Data in ${city}`;
+      document.getElementById('title').textContent = `Today's Current Data`;
     })
     .catch(error => {
       console.error('Error fetching weather data:', error);
     });
 }
 
-// Function to update date and time
 function updateDateTime() {
   const dateElement = document.getElementById('current-date');
   const timeElement = document.getElementById('current-time');
   const now = new Date();
 
-  // Format date (e.g., "November 27, 2024")
   const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   dateElement.textContent = now.toLocaleDateString('en-US', dateOptions);
 
-  // Format time (e.g., "12:00 PM")
   const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
   timeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
 }
@@ -173,7 +167,7 @@ function fetchFiveDayForecast(lat, lon) {
     })
     .then(data => {
       const forecastCards = document.getElementById('forecast-cards');
-      forecastCards.innerHTML = ''; // Clear any existing content
+      forecastCards.innerHTML = ''; 
 
       const dailyData = {};
       data.list.forEach(item => {
@@ -229,7 +223,6 @@ function fetchFiveDayForecast(lat, lon) {
     });
 }
 
-// Modified fetchAirQualityStatus function to accept latitude and longitude as parameters
 function fetchAirQualityStatus(lat, lon) {
   const airQualityUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 
@@ -246,9 +239,8 @@ function fetchAirQualityStatus(lat, lon) {
       // Calculate average air quality
       const averageAQ = (pollution.pm2_5 + pollution.pm10 + pollution.co + pollution.no2 + pollution.so2 + pollution.nh3) / 6;
 
-      // Update air quality status
       const airQualityStatus = document.getElementById('air-quality-status');
-      airQualityStatus.classList.remove('good', 'average', 'bad'); // Clear any existing classes
+      airQualityStatus.classList.remove('good', 'average', 'bad'); 
 
       let statusText = '';
       if (averageAQ < 50) {
@@ -288,12 +280,10 @@ function loadDetailedData() {
   const airQualityExplanationCard = document.getElementById('air-quality-explanation-card');
   airQualityExplanationCard.style.display = 'block';
 
-  // Hide air quality status and load button after data is loaded
   document.getElementById('air-quality-status').style.display = 'none';
   document.querySelector('#air-quality-card button').style.display = 'none';
 
-  // Fetch air quality data
-  fetchAirQualityStatus(lat, lon); // Pass the user's latitude and longitude here
+  fetchAirQualityStatus(lat, lon); 
 }
 
 // Update date and time once on page load and every second
@@ -301,16 +291,13 @@ document.addEventListener('DOMContentLoaded', function() {
   updateDateTime();
   setInterval(updateDateTime, 1000);
 
-  // Automatically ask for location and fetch data on load
   displayData();
 });
 
 window.loadDetailedData = loadDetailedData;
 window.displayData = displayData;
 
-// Ensure the default section (intro) is displayed on page load
 document.addEventListener('DOMContentLoaded', () => {
-  // Ensure only the intro section is visible initially
   document.getElementById('intro-section').style.display = 'block';
   document.getElementById('home').style.display = 'none';
   document.getElementById('charts').style.display = 'none';
@@ -350,9 +337,9 @@ function showBarChart() {
   document.getElementById("lineChart").style.display = "none";
   document.getElementById("barChart").style.display = "block";
   document.getElementById("doughnutChart").style.display = "none";
-  document.getElementById("dateRangeContainer").style.display = "none"; // Hide date range dropdown
-  document.getElementById("barChartDropdown").style.display = "block"; // Show bar chart dropdown
-  document.getElementById("doughnutChartDropdown").style.display = "none"; // Hide doughnut chart dropdown
+  document.getElementById("dateRangeContainer").style.display = "none"; 
+  document.getElementById("barChartDropdown").style.display = "block"; 
+  document.getElementById("doughnutChartDropdown").style.display = "none"; 
   updateBarChartWithRealData();
 }
 
@@ -360,9 +347,9 @@ function showDoughnutChart() {
   document.getElementById("lineChart").style.display = "none";
   document.getElementById("barChart").style.display = "none";
   document.getElementById("doughnutChart").style.display = "block";
-  document.getElementById("dateRangeContainer").style.display = "none"; // Hide date range dropdown
-  document.getElementById("barChartDropdown").style.display = "none"; // Hide bar chart dropdown
-  document.getElementById("doughnutChartDropdown").style.display = "block"; // Show doughnut chart dropdown
+  document.getElementById("dateRangeContainer").style.display = "none"; 
+  document.getElementById("barChartDropdown").style.display = "none"; 
+  document.getElementById("doughnutChartDropdown").style.display = "block"; 
   updateDoughnutChartWithRealData();
 }
 
@@ -372,56 +359,11 @@ function showLineChart() {
   document.getElementById("barChart").style.display = "none";
   document.getElementById("doughnutChart").style.display = "none";
   document.getElementById("dateRangeContainer").style.display = "block";
-  document.getElementById("barChartDropdown").style.display = "none"; // Hide bar chart dropdown
-  document.getElementById("doughnutChartDropdown").style.display = "none"; // Show doughnut chart dropdown
+  document.getElementById("barChartDropdown").style.display = "none"; 
+  document.getElementById("doughnutChartDropdown").style.display = "none"; 
 }
-     
-      // Generate mock data for testing (Replace with actual API data fetching)
-      function generateMockData(points, period) {
-        const data = {
-          labels: [],
-          temperature: [],
-          humidity: []
-        };
       
-        const currentDate = new Date();
-        for (let i = 0; i < points; i++) {
-          // Create labels based on period
-          if (period === "hour") {
-            data.labels.push(new Date(currentDate - i * 3600 * 1000).toLocaleTimeString());
-          } else if (period === "day") {
-            data.labels.push(new Date(currentDate - i * 86400 * 1000).toLocaleDateString());
-          } else if (period === "month") {
-            const date = new Date(currentDate);
-            date.setMonth(date.getMonth() - i);
-            data.labels.push(date.toLocaleDateString());
-          }
-      
-          // Mock temperature and humidity data
-          data.temperature.push(Math.random() * 10 + 15); // Random temperature between 15 and 25°C
-          data.humidity.push(Math.random() * 50 + 30);    // Random humidity between 30% and 80%
-        }
-      
-        data.labels.reverse();
-        data.temperature.reverse();
-        data.humidity.reverse();
-      
-        return data;
-      }
-      
-      // Function to update the line chart with new data
-      function updateLineChart(data) {
-        console.log("Updating chart with data:", data);
-        lineChart.data.labels = data.labels;
-        lineChart.data.datasets[0].data = data.temperature;
-        lineChart.data.datasets[1].data = data.humidity;
-        lineChart.update();
-      }
-      
-      // Register the zoom plugin if using Chart.js 3 or later
-      Chart.register(ChartZoom);
-      
-      // Initialize the line chart with zoom/pan functionality
+      // Initialize the line chart 
       const lineChartCtx = document.getElementById('lineChart').getContext('2d');
       lineChart = new Chart(lineChartCtx, {
         type: 'line',
@@ -459,9 +401,8 @@ function showLineChart() {
                   },
                   ticks: {
                     callback: function(value, index, values) {
-                      // Format the time to remove seconds
                       const label = this.getLabelForValue(value);
-                      return label.split(':').slice(0, 2).join(':'); // Keep only HH:MM
+                      return label.split(':').slice(0, 2).join(':'); 
                   },
                       font: {
                           size: 12,
@@ -510,45 +451,39 @@ function showLineChart() {
   });
 
   document.getElementById('dateRange').addEventListener('change', function () {
-    const selectedRange = this.value; // Get the selected value
-    fetchDataForDateRange(selectedRange); // Fetch data for the selected range
+    const selectedRange = this.value; 
+    fetchDataForDateRange(selectedRange); 
 });
 
 // Function to fetch data for the selected date range
 function fetchDataForDateRange(selectedRange) {
     let dataPoints;
-
-    // Fetch or generate data based on the selected range
     switch (selectedRange) {
-        case '1d': // 1 Day
-            dataPoints = generateMockData(24, 'hour'); // Generate 24 hourly data points
+        case '1d': 
+            dataPoints = generateMockData(24, 'hour'); 
             break;
-        case '1w': // 1 Week
-            dataPoints = generateMockData(7, 'day'); // Generate 7 daily data points
+        case '1w': 
+            dataPoints = generateMockData(7, 'day'); 
             break;
-        case '1m': // 1 Month
-            dataPoints = generateMockData(30, 'day'); // Generate 30 daily data points
+        case '1m': 
+            dataPoints = generateMockData(30, 'day'); 
             break;
-        case '1y': // 1 Year
-            dataPoints = generateMockData(12, 'month'); // Generate 12 monthly data points
+        case '1y': 
+            dataPoints = generateMockData(12, 'month'); 
             break;
         default:
-            dataPoints = generateMockData(24, 'hour'); // Default to 1 day
+            dataPoints = generateMockData(24, 'hour'); 
     }
-
-    // Update the chart with the new data
     updateLineChart(dataPoints);
 }
 
-// Function to update the line chart with new data
 function updateLineChart(data) {
-    lineChart.data.labels = data.labels; // Update the labels
-    lineChart.data.datasets[0].data = data.temperature; // Update temperature data
-    lineChart.data.datasets[1].data = data.humidity; // Update humidity data
-    lineChart.update(); // Re-render the chart
+    lineChart.data.labels = data.labels; 
+    lineChart.data.datasets[0].data = data.temperature; 
+    lineChart.data.datasets[1].data = data.humidity;
+    lineChart.update(); 
 }
 
-// Mock data generator (replace this with actual API calls for live data)
 function generateMockData(points, period) {
     const data = {
         labels: [],
@@ -558,7 +493,6 @@ function generateMockData(points, period) {
 
     const currentDate = new Date();
     for (let i = 0; i < points; i++) {
-        // Create labels based on the period
         if (period === 'hour') {
             data.labels.push(
                 new Date(currentDate - i * 3600 * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -572,37 +506,17 @@ function generateMockData(points, period) {
             date.setMonth(date.getMonth() - i);
             data.labels.push(date.toLocaleDateString([], { year: 'numeric', month: 'short' }));
         }
-
-        // Generate random data for temperature and humidity
-        data.temperature.push(Math.random() * 15 + 15); // Random temperature (15-30°C)
-        data.humidity.push(Math.random() * 50 + 30); // Random humidity (30-80%)
+        data.temperature.push(Math.random() * 15 + 15); 
+        data.humidity.push(Math.random() * 50 + 30); 
     }
-
-    data.labels.reverse(); // Ensure chronological order
+    data.labels.reverse(); 
     data.temperature.reverse();
     data.humidity.reverse();
 
     return data;
 }     
-      // Ensure lineChart is ready before calling updateLineChart
-      function updateLineChart(data) {
-        console.log("Updating line chart with data:", data);  // Log entire data object
-        console.log("Labels:", data.labels);
-        console.log("Temperature:", data.temperature);
-        console.log("Humidity:", data.humidity);
-      
-        lineChart.data.labels = data.labels;
-        lineChart.data.datasets[0].data = data.temperature;
-        lineChart.data.datasets[1].data = data.humidity;
-        lineChart.update();
-      }
-      
-      // Fetch data for a default range (e.g., 1 Day) after initializing the chart
-      document.addEventListener("DOMContentLoaded", () => {
-        Chart.register(ChartZoom);
-        fetchDataForDateRange();
-      });
-
+ 
+//Initialize bar chart
       const barChartCtx = document.getElementById('barChart').getContext('2d');
       barChart = new Chart(barChartCtx, {
         type: 'bar',
@@ -610,7 +524,7 @@ function generateMockData(points, period) {
           labels: ['PM2.5', 'PM10', 'NOx', 'NH3', 'CO2', 'SO2', 'VOC'],
           datasets: [{
             label: 'Pollutant Levels (µg/m³)',
-            data: [], // Fill with pollutant data when fetched
+            data: [], 
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
@@ -692,7 +606,6 @@ function generateMockData(points, period) {
       }      
   });
       
-      // Function to update bar chart with fetched data
       function updateBarChart(filteredData) {
         barChart.data.datasets[0].data = filteredData;
         barChart.update();
@@ -703,7 +616,7 @@ function generateMockData(points, period) {
         data: {
           labels: ['PM2.5', 'PM10', 'NOx', 'NH3', 'CO2', 'SO2', 'VOC'],
           datasets: [{
-            data: [], // Fill with distribution data
+            data: [], 
             backgroundColor: [
               'rgba(255, 99, 132, 0.6)',
               'rgba(54, 162, 235, 0.6)',
@@ -723,21 +636,21 @@ function generateMockData(points, period) {
                   labels: {
                       font: {
                           size: 14,
-                          weight: 'bold' // Bold text for legend
+                          weight: 'bold' 
                       },
-                      color: '#333' // Darker color
+                      color: '#333' 
                   }
               },
               tooltip: {
                   callbacks: {
                       label: function(context) {
-                          const value = context.raw; // Tooltip value
-                          const label = context.label; // Tooltip label
-                          return `${label}: ${value} µg/m³`; // Add unit to value
+                          const value = context.raw; 
+                          const label = context.label; 
+                          return `${label}: ${value} µg/m³`; 
                       }
                   },
                   bodyFont: {
-                      weight: 'bold', // Bold text in tooltips
+                      weight: 'bold', 
                       size: 14
                   }
               }
@@ -753,7 +666,7 @@ function generateMockData(points, period) {
         data: {
             labels: ['PM2.5', 'PM10', 'NO2', 'NH3', 'CO', 'SO2'],
             datasets: [{
-                data: [], // Fill with data after uploading the file
+                data: [], 
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.6)',
                     'rgba(54, 162, 235, 0.6)',
@@ -761,7 +674,7 @@ function generateMockData(points, period) {
                     'rgba(153, 102, 255, 0.6)',
                     'rgba(255, 159, 64, 0.6)',
                     'rgba(255, 205, 86, 0.6)',
-                    'rgba(255, 105, 180, 0.6)', // Additional color if needed
+                    'rgba(255, 105, 180, 0.6)', 
                     'rgba(255, 215, 0, 0.6)' 
                 ]
             }]
@@ -781,10 +694,9 @@ function generateMockData(points, period) {
                 },
                 tooltip: {
                   callbacks: {
-                      // Customize the tooltip label
                       label: function(tooltipItem) {
-                          let value = tooltipItem.raw; // The value from the dataset
-                          return value + ' µg/m³'; // Append the unit
+                          let value = tooltipItem.raw; 
+                          return value + ' µg/m³'; 
                       }
                   }
               }
@@ -799,7 +711,7 @@ function generateMockData(points, period) {
         data: {
             labels: ['PM2.5', 'PM10', 'NO2', 'NH3', 'CO', 'SO2'],
             datasets: [{
-                data: [], // Fill with data after uploading the file
+                data: [], 
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.6)',
                     'rgba(54, 162, 235, 0.6)',
@@ -807,7 +719,7 @@ function generateMockData(points, period) {
                     'rgba(153, 102, 255, 0.6)',
                     'rgba(255, 159, 64, 0.6)',
                     'rgba(255, 205, 86, 0.6)',
-                    'rgba(255, 105, 180, 0.6)', // Additional color if needed
+                    'rgba(255, 105, 180, 0.6)', 
                     'rgba(255, 215, 0, 0.6)' 
                 ]
             }]
@@ -827,10 +739,9 @@ function generateMockData(points, period) {
                 },
                 tooltip: {
                   callbacks: {
-                      // Customize the tooltip label
                       label: function(tooltipItem) {
-                          let value = tooltipItem.raw; // The value from the dataset
-                          return value + ' µg/m³'; // Append the unit
+                          let value = tooltipItem.raw; 
+                          return value + ' µg/m³'; 
                       }
                   }
               }
@@ -841,14 +752,13 @@ function generateMockData(points, period) {
 
 function showCharts() {
   const chartsContainer = document.getElementById('charts-container');
-  chartsContainer.style.display = 'flex';  // Change to flex to align charts correctly
+  chartsContainer.style.display = 'flex';  
 }
 
-// Utility function to calculate the average of an array
 function getAverage(dataArray) {
-  if (dataArray.length === 0) return 0; // Return 0 if no data to average
+  if (dataArray.length === 0) return 0; 
   const sum = dataArray.reduce((acc, value) => acc + value, 0);
-  return sum / dataArray.length; // Calculate average
+  return sum / dataArray.length; 
 }
 
 function handleExcelUpload() {
@@ -863,32 +773,25 @@ function handleExcelUpload() {
   const reader = new FileReader();
 
   reader.onload = function(event) {
-    console.log("File successfully read.");
     const data = new Uint8Array(event.target.result);
     const workbook = XLSX.read(data, { type: 'array' });
-    console.log("Workbook loaded.");
  
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-    console.log("Parsed JSON Data:", jsonData);
 
-    // Now update the charts using the parsed data
     updateChartFromExcel(jsonData);
     document.getElementById('charts-container').style.display = 'flex';
 
-    // Add a short delay before resizing charts to ensure they are properly displayed
     setTimeout(() => {
       if (pieChart) {
-        console.log("Forcing Pie Chart to resize...");
-        pieChart.resize(); // Force the pie chart to resize/redraw
+        pieChart.resize(); 
       }
 
       if (polarAreaChart) {
-        console.log("Forcing Polar Area Chart to resize...");
-        polarAreaChart.resize(); // Force the polar area chart to resize/redraw
+        polarAreaChart.resize(); 
       }
-    }, 100); // Adjust the timeout duration if necessary (100 ms)
+    }, 100); 
   };
 
   reader.readAsArrayBuffer(file);
@@ -907,14 +810,13 @@ function updateChartFromExcel(parsedData) {
     "NO": [],
     "CO": [],
     "NO2": [],
-    "SO2": [], // Added for USA data
-    "O3": [],  // Added for USA data
+    "SO2": [], 
+    "O3": [],  
     "NH3": []
   };
 
   parsedData.forEach(item => {
     const pollutant = item.Pollutant.trim();
-    console.log('Identified Pollutant:', pollutant); // Add this for debugging
     const value = parseFloat(item.Value);
     if (pollutantsData[pollutant] !== undefined && !isNaN(value)) {
       pollutantsData[pollutant].push(value);
@@ -925,16 +827,12 @@ function updateChartFromExcel(parsedData) {
   const avgValues = Object.keys(pollutantsData).map(pollutant => {
     return getAverage(pollutantsData[pollutant]);
   });
-  console.log("Average Values:", avgValues);
-
-  
   updateXPieChart(avgValues);
   updateXPolarAreaChart(avgValues);
 }
 
 function updateXPieChart(avgValues) {
   if (pieChart) {
-    console.log("Updating Pie Chart with:", avgValues);
     pieChart.data.datasets[0].data = avgValues;
     pieChart.update();
   }
@@ -942,7 +840,6 @@ function updateXPieChart(avgValues) {
 
 function updateXPolarAreaChart(avgValues) {
   if (polarAreaChart) {
-    console.log("Updating Polar Area Chart with:", avgValues);
     polarAreaChart.data.datasets[0].data = avgValues;
     polarAreaChart.update();
   }
@@ -979,7 +876,6 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
   });
   
       
-      // Function to update doughnut chart with fetched distribution data
       function updateDoughnutChart(filteredData) {
         doughnutChart.data.datasets[0].data = filteredData;
         doughnutChart.update();
@@ -994,7 +890,7 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
         }
       }
 
-      let cities = []; // Will hold the cities from the JSON file
+      let cities = []; //Holds the cities from the JSON file
       let selectedCities = {}; // Object to store selected cities by inputId
       
       // Fetch cities data and store it
@@ -1007,18 +903,17 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
         }
       }
       
-      // Call this function on page load to populate the cities array
       loadCities();
       
       function showSuggestions(inputId) {
         const inputElement = document.getElementById(inputId);
         const query = inputElement.value.toLowerCase();
         const suggestionBox = document.getElementById(`suggestions-${inputId}`);
-        suggestionBox.innerHTML = ''; // Clear suggestions
+        suggestionBox.innerHTML = ''; 
     
         if (!query) {
             suggestionBox.style.display = 'none';
-            selectedCities[inputId] = null; // Reset selection
+            selectedCities[inputId] = null; 
             return;
         }
     
@@ -1035,7 +930,7 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
                     id: city.id,
                     lat: city.lat,
                     lon: city.lon
-                }; // Store lat and lon
+                }; 
                 suggestionBox.style.display = 'none';
             };
             suggestionBox.appendChild(option);
@@ -1088,9 +983,6 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
         const city1ApiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${city1.lat}&lon=${city1.lon}&appid=${apiKey}`;
         const city2ApiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${city2.lat}&lon=${city2.lon}&appid=${apiKey}`;
     
-        console.log('City 1 API URL:', city1ApiUrl);
-        console.log('City 2 API URL:', city2ApiUrl);
-    
         Promise.all([fetch(city1ApiUrl), fetch(city2ApiUrl)])
             .then(async ([city1Response, city2Response]) => {
                 if (!city1Response.ok || !city2Response.ok) {
@@ -1099,10 +991,6 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
                 const city1Data = await city1Response.json();
                 const city2Data = await city2Response.json();
     
-                console.log('City 1 Data:', city1Data);
-                console.log('City 2 Data:', city2Data);
-    
-                // Render charts (update as necessary)
                 renderChart('city1Chart', city1Data.list[0].components, chartType, city1InputId);
                 renderChart('city2Chart', city2Data.list[0].components, chartType, city2InputId);
             })
@@ -1148,7 +1036,7 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
           options: {
               responsive: true,
               maintainAspectRatio: true,
-              aspectRatio: 1, // Adjust aspect ratio (e.g., 1 for square, 2 for rectangle)
+              aspectRatio: 1, 
               plugins: {
                 tooltip: {
                   callbacks: {
@@ -1170,4 +1058,3 @@ document.getElementById("barChartFilter").addEventListener("change", (event) => 
         }
         new Chart(ctx, config);
       }
-

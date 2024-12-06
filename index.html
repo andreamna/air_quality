@@ -8,13 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Header Section -->
+  
   <header>
     <h1>Air Quality Monitoring Dashboard</h1>
     <p>Stay updated with real-time air quality data</p>
   </header>
 
-  <!-- Navigation Bar -->
   <nav class="navbar">
     <ul>
       <li><a href="#" onclick="showSection('intro-section')">Home</a></li>
@@ -23,7 +22,6 @@
     </ul>
   </nav>
 
-  <!-- Full-screen Intro Section -->
   <section id="intro-section" class="intro-section">
     <div class="intro-content">
       <h4>Your source for real-time air quality insights.</h4>
@@ -31,11 +29,9 @@
     </div>
   </section>
 
-  <!-- Home Section (Initially Hidden) -->
   <section id="home" class="content-section" style="display: none;">
     <h2 id="title"></h2>
     <div class="dashboard-container">
-      <!-- Weather and Air Quality Cards -->
       <div class="dashboard-card large-card" id="temperature-card">
         <h3>Temperature</h3>
         <div class="icon" id="weather-icon">☀️</div>
@@ -88,7 +84,6 @@
         <span class="visibility-icon">👁️</span>
         <p><span id="visibility">--</span></p>
       </div>      
-      <!-- Wind Speed Card (Updated with icon and similar layout to humidity card) -->
       <div class="dashboard-card medium-card" id="wind-speed-card">
         <h3>Wind Speed</h3>
         <div class="wind-icon">💨</div>
@@ -112,10 +107,8 @@
       <div id="seven-day-forecast" class="dashboard-card large-card">
         <h3>5-Day Forecast</h3>
         <div id="forecast-cards" class="forecast-cards">
-          <!-- The 7-day forecast items will be inserted here dynamically -->
         </div>
       </div>
-      <!-- New Detailed Air Quality Data Card -->
       <div class="dashboard-card large-card" id="air-quality-explanation-card" style="display: none;">
             <h3>Air Quality Criteria</h3>
             <div id="air-quality-explanation" class="explanation-text">
@@ -134,11 +127,9 @@
         </div>
   </section>
 
-   <!-- Charts Section -->
    <section id="charts" class="content-section" style="display: none;">
     <h2>Charts</h2>
     
-    <!-- Chart Type Buttons -->
     <div id="chartTypeButtons" style="display: flex; gap: 1rem; align-items: flex-start;">
       <div>
         <button onclick="showLineChart()">Line Chart</button>
@@ -154,7 +145,6 @@
       </div>
     </div>
   
-    <!-- Line Chart Dropdown -->
     <div id="dateRangeContainer" style="display: none;">
       <label for="dateRange">Select Date Range:</label>
       <select id="dateRange" onchange="fetchDataForDateRange()">
@@ -164,7 +154,7 @@
         <option value="1y">1 Year</option>
       </select>
     </div>
-    <!-- Dropdown for Bar Chart -->
+
 <div id="barChartDropdown" style="display: none; margin-top: 1rem;">
   <label for="barChartFilter">Filter Bar Chart:</label>
   <select id="barChartFilter">
@@ -174,7 +164,6 @@
   </select>
 </div>
 
-<!-- Dropdown for Doughnut Chart -->
 <div id="doughnutChartDropdown" style="display: none; margin-top: 1rem;">
   <label for="doughnutChartFilter">Filter Doughnut Chart:</label>
   <select id="doughnutChartFilter">
@@ -183,7 +172,6 @@
     <option value="gaseous">Gaseous Pollutants (NOx, NH3, CO2, SO2)</option>
   </select>
 </div>
-<!-- Charts -->
  <br>
  <br>
 <canvas id="lineChart" style="display: none;"></canvas>
@@ -192,20 +180,18 @@
 <br>
 <br>
   </section>
-  <!-- About Section -->
   <section id="about" class="content-section" style="display: none;">
     <h1>About Us</h1>
     
-    <!-- Mission Statement -->
     <section class="mission">
       <table class="mission-table">
         <tr>
-          <!-- Text on the left -->
+
           <td class="text">
             <h2>Our Mission</h2>
             <p>Our mission is to raise awareness about air pollution, provide real-time air quality data, and empower communities to make informed decisions for healthier lives.</p>
           </td>
-          <!-- Image on the right -->
+
           <td class="image">
             <img src="airpollution.png" alt="Mission image" />
           </td>
@@ -213,15 +199,13 @@
       </table>
     </section>
 
-    <!-- Why Air Quality Monitoring Matters Section -->
     <section class="importance">
       <table class="importance-table">
         <tr>
-          <!-- Image on the left -->
           <td class="image">
             <img src="air-quality-monitoring.png" alt="Air quality matters image" />
           </td>
-          <!-- Text on the right -->
+
           <td class="text">
             <h2>Why Air Quality Monitoring Matters</h2>
             <ul>
@@ -234,13 +218,12 @@
       </table>
     </section>
   </div>
-  <!-- How This Website Works -->
+  
   <section class="how-it-works">
     <h2>How This Website Works</h2>
     <p>This website collects air quality data from trusted sources like the OpenWeatherMap API and public air monitoring stations. We present data about key pollutants, such as PM2.5 and NOx, in easy-to-understand charts and comparisons. Users can toggle between units and view detailed pollutant levels (measured in µg/m³).</p>
   </section>
 
-  <!-- Educational Information -->
   <section class="education">
     <h2>Understanding Air Pollutants</h2>
     <ul>
@@ -253,7 +236,6 @@
     </ul>
   </section>
 
-  <!-- Interactive Media -->
   <section class="media">
     <h2>Learn More About Air Quality</h2>
     <div class="video-container">
@@ -263,21 +245,16 @@
 </section>
 </section>
   
-    
-  
-  <!-- Sidebar -->
-  <!-- Sidebar -->
 <div class="sidebar">
   <h3>Options</h3>
   <button onclick="showSection('compare-worldwide')">Compare Worldwide Data</button>
   <button onclick="showSection('excel-upload-section')">Upload Excel Data</button>
 </div>
 
-<!-- Compare Worldwide Data Section -->
 <section id="compare-worldwide" class="content-section" style="display: none;">
   <h2>Compare Worldwide Data</h2>
   <form id="compareForm">
-<!-- City input fields -->
+
 <div>
   <label for="city1">City 1:</label>
   <input
@@ -332,7 +309,6 @@
   </div>
 </section>
 
-  <!-- Footer -->
   <footer>
     <div style="margin-bottom: 5px;">
       <a href="https://instagram.com/unep" target="_blank" style="color: #fff; margin-right: 10px; text-decoration: none;">UNEP</a> |
@@ -342,7 +318,6 @@
     <div>© 2024 Air Quality Dashboard.</div>
   </footer>
   
-  <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
   <script src="weather.js"></script>
